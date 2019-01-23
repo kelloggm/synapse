@@ -36,6 +36,7 @@ import java.security.Key;
 public class JBossEncryptionSecretCallbackHandler extends AbstractSecretCallbackHandler {
 
     private static final String ALGORITHM = "Blowfish";
+    @SuppressWarnings("compliance") // Hardcoded database passphrase
     private static Key key = new SecretKeySpec("jaas is the way".getBytes(), ALGORITHM);
 
     /**

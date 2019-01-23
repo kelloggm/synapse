@@ -200,6 +200,7 @@
 			<compilerArguments>
 			  <Xmaxerrs>10000</Xmaxerrs>
 			  <Xmaxwarns>10000</Xmaxwarns>
+			  <Astubs>/Users/kelloggm/Research/compliance-ws/aws-kms-compliance-checker/OtherJavaCrypto.astub</Astubs>
 			</compilerArguments>
 			<annotationProcessorPaths>
 			  <path>

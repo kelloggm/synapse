@@ -59,6 +59,7 @@ public class SymmetricCipher extends BaseCipher {
         }
     }
 
+    @SuppressWarnings("compliance") // TRUE POSITIVE: 24-byte AES key hardcoded into app
     private SecretKeySpec createDefaultKey() {
         //TODO use akey generator
         byte[] keyBytes = new byte[]{

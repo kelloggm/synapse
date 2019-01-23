@@ -414,6 +414,7 @@ public final class CipherTool {
      * @param cipherInformation cipher information
      * @return an valid <code>Key</code> if found , otherwise
      */
+    @SuppressWarnings("compliance") // TRUE POSITIVE: key is read from user input, but its length is not checked
     private static Key findKey(CommandLine cmd, CipherInformation cipherInformation) {
         // if pass phrase is specified, use simple symmetric en-/decryption
         String passPhrase = getArgument(cmd, PASSPHRASE, null);
