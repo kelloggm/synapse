@@ -29,6 +29,8 @@ import org.apache.synapse.securevault.secret.SingleSecretCallback;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 
+import com.amazon.checkerframework.cryptopolicy.qual.SuppressCryptoWarning;
+
 /**
  * SecretCallbackHandler implementation which is compatible to the default encryption used
  * within the JBoss Application Server to decrypt database passwords.
@@ -56,6 +58,7 @@ public class JBossEncryptionSecretCallbackHandler extends AbstractSecretCallback
      * @param encryptedSecret the encrypted secret
      * @return the decrypted secret.
      */
+    @SuppressCryptoWarning(issue = "https://www.google.com") // TRUE POSITIVE: Blowfish isn't an approved crypto algo
     private static String decrypt(String encryptedSecret) {
         CipherInformation cipherInformation = new CipherInformation();
         cipherInformation.setAlgorithm(ALGORITHM);

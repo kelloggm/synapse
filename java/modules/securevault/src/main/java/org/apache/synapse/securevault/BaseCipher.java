@@ -29,6 +29,9 @@ import org.apache.synapse.securevault.keystore.KeyStoreWrapper;
 import org.apache.synapse.securevault.keystore.TrustKeyStoreWrapper;
 import org.apache.synapse.securevault.secret.SecretInformation;
 
+import org.checkerframework.common.value.qual.StringVal;
+import com.amazon.checkerframework.cryptopolicy.qual.SuppressCryptoWarning;
+
 import javax.crypto.Cipher;
 import javax.crypto.CipherOutputStream;
 import javax.crypto.NoSuchPaddingException;
@@ -89,6 +92,7 @@ public abstract class BaseCipher implements EncryptionProvider, DecryptionProvid
         init();
     }
 
+    @SuppressCryptoWarning(issue = "https://www.google.com/") // TRUE POSITIVE: (?) Fake URL to make checker happy. Blowfish is *probably* safe but not on the whitelist.
     private void init() {
 
         String algorithm = cipherInformation.getAlgorithm();

@@ -200,7 +200,7 @@
 			<compilerArguments>
 			  <Xmaxerrs>10000</Xmaxerrs>
 			  <Xmaxwarns>10000</Xmaxwarns>
-			  <Astubs>/Users/kelloggm/Research/compliance-ws/aws-kms-compliance-checker/OtherJavaCrypto.astub</Astubs>
+			  <Astubs>/Users/kelloggm/Research/compliance-ws/aws-kms-compliance-checker/OtherJavaCrypto.astub:/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/stubs/java.security.astub:/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/stubs/javax.crypto.astub</Astubs>
 			</compilerArguments>
 			<annotationProcessorPaths>
 			  <path>
@@ -214,6 +214,11 @@
 			    <version>1.0</version>
 			  </path>
 			  <path>
+			    <groupId>com.amazonaws</groupId>
+			    <artifactId>aws-crypto-compliance-checker</artifactId>
+			    <version>1.0</version>
+			  </path>
+			  <path>
 			    <groupId>org.checkerframework</groupId>
 			    <artifactId>checker-qual</artifactId>
 			    <version>2.5.8</version>
@@ -221,7 +226,7 @@
 			</annotationProcessorPaths>
 			<annotationProcessors>
 			  <!-- Add all the checkers you want to enable here -->
-			  <annotationProcessor>com.amazon.checkerframework.compliance.kms.ComplianceChecker</annotationProcessor>
+			  <annotationProcessor>com.amazon.checkerframework.compliance.kms.ComplianceChecker,com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker</annotationProcessor>
 			</annotationProcessors>
                     </configuration>
                 </plugin>
@@ -982,6 +987,13 @@
 	      <version>1.0</version>
 	      <scope>system</scope>
 	      <systemPath>/Users/kelloggm/Research/compliance-ws/aws-kms-compliance-checker/build/libs/aws-kms-compliance-checker.jar</systemPath>
+	    </dependency>
+	    <dependency>
+	      <groupId>com.amazonaws</groupId>
+	      <artifactId>crypto-policy-compliance-checker</artifactId>
+	      <version>1.0</version>
+	      <scope>system</scope>
+	      <systemPath>/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/build/libs/aws-crypto-policy-compliance-checker.jar</systemPath>
 	    </dependency>
 	    <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
 	    <dependency>

@@ -23,6 +23,8 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.synapse.securevault.CipherOperationMode;
 import org.apache.synapse.securevault.EncodingType;
 
+import com.amazon.checkerframework.cryptopolicy.qual.CryptoWhiteListed;
+
 /**
  * Encapsulates the cipher related information
  */
@@ -36,7 +38,8 @@ public class CipherInformation {
     private static final Log log = LogFactory.getLog(CipherInformation.class);
 
     /* Cipher algorithm */
-    private String algorithm = DEFAULT_ALGORITHM;
+    private @CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
+            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String algorithm = DEFAULT_ALGORITHM;
 
     /* Cipher operation mode - ENCRYPT or DECRYPT */
     private CipherOperationMode cipherOperationMode;
@@ -55,11 +58,13 @@ public class CipherInformation {
 
     private String provider;
 
-    public String getAlgorithm() {
+    public @CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
+            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String getAlgorithm() {
         return algorithm;
     }
 
-    public void setAlgorithm(String algorithm) {
+    public void setAlgorithm(@CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
+            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String algorithm) {
         if (algorithm == null || "".equals(algorithm)) {
             log.info("Given algorithm is null, using a default one : RSA");
         }
