@@ -24,6 +24,7 @@ import org.apache.synapse.securevault.CipherOperationMode;
 import org.apache.synapse.securevault.EncodingType;
 
 import com.amazon.checkerframework.cryptopolicy.qual.CryptoWhiteListed;
+import org.checkerframework.common.value.qual.StringVal;
 
 /**
  * Encapsulates the cipher related information
@@ -33,13 +34,13 @@ public class CipherInformation {
     /**
      * Default cipher algorithm
      */
-    public static final String DEFAULT_ALGORITHM = "RSA";
+    @SuppressWarnings({"crypto", "compliance", "value"}) // TRUE POSITIVE: "RSA" without specifying the encoding or padding is not strong enough, according the to rules we're using
+    public static final @StringVal("RSA/ECB/OAEPPadding") String DEFAULT_ALGORITHM = "RSA";
 
     private static final Log log = LogFactory.getLog(CipherInformation.class);
 
     /* Cipher algorithm */
-    private @CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
-            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String algorithm = DEFAULT_ALGORITHM;
+    private @StringVal("RSA/ECB/OAEPPadding") String algorithm = DEFAULT_ALGORITHM;
 
     /* Cipher operation mode - ENCRYPT or DECRYPT */
     private CipherOperationMode cipherOperationMode;
@@ -58,13 +59,11 @@ public class CipherInformation {
 
     private String provider;
 
-    public @CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
-            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String getAlgorithm() {
+    public @StringVal("RSA/ECB/OAEPPadding") String getAlgorithm() {
         return algorithm;
     }
 
-    public void setAlgorithm(@CryptoWhiteListed({"aes/ctr/nopadding", "aes/gcm/nopadding", "aes/cbc/pkcs5padding", "aeswrap",
-            "rsa/ecb/oaeppadding", "rsa/ecb/oaepwithsha.*"}) String algorithm) {
+    public void setAlgorithm(@StringVal("RSA/ECB/OAEPPadding") String algorithm) {
         if (algorithm == null || "".equals(algorithm)) {
             log.info("Given algorithm is null, using a default one : RSA");
         }

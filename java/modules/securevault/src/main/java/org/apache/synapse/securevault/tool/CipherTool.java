@@ -240,6 +240,7 @@ public final class CipherTool {
      * @param cmd Command line which capture all command line arguments
      * @return CipherInformation object
      */
+    @SuppressWarnings({"compliance", "crypto", "value"}) // TRUE POSITIVE: cipher is loaded from command line here.
     private static CipherInformation getCipherInformation(CommandLine cmd) {
 
         CipherInformation information = new CipherInformation();

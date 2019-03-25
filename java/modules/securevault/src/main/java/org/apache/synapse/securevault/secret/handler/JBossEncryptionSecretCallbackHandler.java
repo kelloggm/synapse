@@ -58,7 +58,7 @@ public class JBossEncryptionSecretCallbackHandler extends AbstractSecretCallback
      * @param encryptedSecret the encrypted secret
      * @return the decrypted secret.
      */
-    @SuppressCryptoWarning(issue = "https://www.google.com") // TRUE POSITIVE: Blowfish isn't an approved crypto algo
+    @SuppressWarnings({"crypto","compliance","value"}) // TRUE POSITIVE: Blowfish isn't an approved crypto algo
     private static String decrypt(String encryptedSecret) {
         CipherInformation cipherInformation = new CipherInformation();
         cipherInformation.setAlgorithm(ALGORITHM);

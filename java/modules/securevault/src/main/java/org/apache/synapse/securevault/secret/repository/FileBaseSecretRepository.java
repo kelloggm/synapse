@@ -77,7 +77,7 @@ public class FileBaseSecretRepository implements SecretRepository {
      * @param properties Configuration properties
      * @param id         Identifier to identify properties related to the corresponding repository
      */
-    @SuppressCryptoWarning(issue = "https://www.google.com") // TRUE POSITIVE: crypto algo is coming from config file
+    @SuppressWarnings({"crypto","compliance","value"}) // TRUE POSITIVE: crypto algo is coming from config file
     public void init(Properties properties, String id) {
         StringBuffer sb = new StringBuffer();
         sb.append(id);
