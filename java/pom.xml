@@ -200,14 +200,15 @@
 			<compilerArguments>
 			  <Xmaxerrs>10000</Xmaxerrs>
 			  <Xmaxwarns>10000</Xmaxwarns>
-			  <Astubs>/Users/kelloggm/Research/compliance-ws/aws-kms-compliance-checker/OtherJavaCrypto.astub:/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/stubs/java.security.astub:/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/stubs/javax.crypto.astub</Astubs>
+			  <Astubs>${project.basedir}/stubs/</Astubs>
 			</compilerArguments>
 			<annotationProcessorPaths>
 			  <path>
 			    <groupId>org.checkerframework</groupId>
 			    <artifactId>checker</artifactId>
-			    <version>2.5.8</version>
+			    <version>2.9.0</version>
 			  </path>
+                <!--
 			  <path>
 			    <groupId>com.amazonaws</groupId>
 			    <artifactId>kms-compliance-checker</artifactId>
@@ -217,16 +218,21 @@
 			    <groupId>com.amazonaws</groupId>
 			    <artifactId>aws-crypto-compliance-checker</artifactId>
 			    <version>1.0</version>
-			  </path>
+			  </path>-->
 			  <path>
 			    <groupId>org.checkerframework</groupId>
 			    <artifactId>checker-qual</artifactId>
-			    <version>2.5.8</version>
+			    <version>2.9.0</version>
 			  </path>
+                <path>
+                    <groupId>org.checkerframework</groupId>
+                    <artifactId>HTTPSChecker</artifactId>
+                    <version>0.1-snapshot</version>
+                </path>
 			</annotationProcessorPaths>
 			<annotationProcessors>
 			  <!-- Add all the checkers you want to enable here -->
-			  <annotationProcessor>com.amazon.checkerframework.compliance.kms.ComplianceChecker,com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker</annotationProcessor>
+			  <annotationProcessor>org.checkerframework.checker.https.HTTPSChecker<!--com.amazon.checkerframework.compliance.kms.ComplianceChecker,com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker--></annotationProcessor>
 			</annotationProcessors>
                     </configuration>
                 </plugin>
@@ -980,7 +986,7 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
-
+        <!--
 	    <dependency>
 	      <groupId>com.amazonaws</groupId>
 	      <artifactId>kms-compliance-checker</artifactId>
@@ -994,17 +1000,22 @@
 	      <version>1.0</version>
 	      <scope>system</scope>
 	      <systemPath>/Users/kelloggm/Research/compliance-ws/aws-crypto-policy-compliance-checker/build/libs/aws-crypto-policy-compliance-checker.jar</systemPath>
-	    </dependency>
+	    </dependency>-->
+            <dependency>
+                <groupId>org.checkerframework</groupId>
+                <artifactId>HTTPSChecker</artifactId>
+                <version>0.1-snapshot</version>
+            </dependency>
 	    <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->
 	    <dependency>
 	      <groupId>org.checkerframework</groupId>
 	      <artifactId>checker-qual</artifactId>
-	      <version>2.5.8</version>
+	      <version>2.9.0</version>
 	    </dependency>
 	    <dependency>
 	      <groupId>org.checkerframework</groupId>
 	      <artifactId>jdk8</artifactId>
-	      <version>2.5.8</version>
+	      <version>2.9.0</version>
 	    </dependency>
 	    
             <dependency>
