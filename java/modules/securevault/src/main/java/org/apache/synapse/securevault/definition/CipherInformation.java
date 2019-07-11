@@ -23,7 +23,7 @@ import org.apache.commons.logging.LogFactory;
 import org.apache.synapse.securevault.CipherOperationMode;
 import org.apache.synapse.securevault.EncodingType;
 
-import com.amazon.checkerframework.cryptopolicy.qual.CryptoWhiteListed;
+//import com.amazon.checkerframework.cryptopolicy.qual.CryptoWhiteListed;
 import org.checkerframework.common.value.qual.StringVal;
 
 /**
