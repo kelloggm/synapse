@@ -116,7 +116,7 @@ public class CRLCache implements ManageableCache {
         }
 
         try {
-            @StartsWith({"https"}) String crlUrl = cacheValue.crlUrl;
+            @StartsWith({"https", "file"}) String crlUrl = cacheValue.crlUrl;
             X509CRL x509CRL = crlVerifier.downloadCRLFromWeb(crlUrl);
             this.setCacheValue(crlUrl, x509CRL);
         } catch (Exception e) {
@@ -142,7 +142,7 @@ public class CRLCache implements ManageableCache {
         return null;
     }
 
-    public synchronized void setCacheValue(@StartsWith({"https"}) String crlUrl, X509CRL crl) {
+    public synchronized void setCacheValue(@StartsWith({"https", "file"}) String crlUrl, X509CRL crl) {
         CRLCacheValue cacheValue = new CRLCacheValue(crlUrl, crl);
         if (log.isDebugEnabled()) {
             log.debug("Before set - HashMap size " + hashMap.size());
@@ -169,11 +169,11 @@ public class CRLCache implements ManageableCache {
      */
     private class CRLCacheValue implements ManageableCacheValue {
 
-        private @StartsWith({"https"}) String crlUrl;
+        private @StartsWith({"https", "file"}) String crlUrl;
         private X509CRL crl;
         private long timeStamp = System.currentTimeMillis();
 
-        public CRLCacheValue(@StartsWith({"https"}) String crlUrl, X509CRL crl) {
+        public CRLCacheValue(@StartsWith({"https", "file"}) String crlUrl, X509CRL crl) {
             this.crlUrl = crlUrl;
             this.crl = crl;
         }

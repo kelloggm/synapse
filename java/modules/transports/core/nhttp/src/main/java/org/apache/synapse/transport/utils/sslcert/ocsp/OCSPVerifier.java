@@ -78,9 +78,9 @@ public class OCSPVerifier implements RevocationVerifier {
 
         OCSPReq request = generateOCSPRequest(issuerCert, peerCert.getSerialNumber());
         //This list will sometimes have non ocsp urls as well.
-        List<@StartsWith({"https"}) String> locations = getAIALocations(peerCert);
+        List<@StartsWith({"https"}, "file") String> locations = getAIALocations(peerCert);
 
-        for (@StartsWith({"https"}) String serviceUrl : locations) {
+        for (@StartsWith({"https"}, "file") String serviceUrl : locations) {
 
             SingleResp[] responses;
             try {
@@ -129,7 +129,7 @@ public class OCSPVerifier implements RevocationVerifier {
      * @throws CertificateVerificationException
      *
      */
-    protected OCSPResp getOCSPResponse(@StartsWith({"https"}) String serviceUrl,
+    protected OCSPResp getOCSPResponse(@StartsWith({"https", "file"}) String serviceUrl,
                                        OCSPReq request) throws CertificateVerificationException {
         try {
             //Todo: Use http client.
@@ -221,7 +221,7 @@ public class OCSPVerifier implements RevocationVerifier {
      */
 
     @SuppressWarnings({"startswith"}) //FALSE POSITIVE: URI is checked by calling gettagno
-    private List<@StartsWith({"https"}) String> getAIALocations(X509Certificate cert) throws CertificateVerificationException {
+    private List<@StartsWith({"https", "file"}) String> getAIALocations(X509Certificate cert) throws CertificateVerificationException {
 
         //Gets the DER-encoded OCTET string for the extension value for Authority information access Points
         byte[] aiaExtensionValue = cert.getExtensionValue(X509Extensions.AuthorityInfoAccess.getId());
@@ -242,14 +242,14 @@ public class OCSPVerifier implements RevocationVerifier {
             throw new CertificateVerificationException("Cannot read certificate to get OCSP URLs", e);
         }
 
-        List<@StartsWith({"https"}) String> ocspUrlList = new ArrayList<@StartsWith({"https"}) String>();
+        List<@StartsWith({"https", "file"}) String> ocspUrlList = new ArrayList<@StartsWith({"https", "file"}) String>();
         AccessDescription[] accessDescriptions = authorityInformationAccess.getAccessDescriptions();
         for (AccessDescription accessDescription : accessDescriptions) {
 
             GeneralName gn = accessDescription.getAccessLocation();
             if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
                 DERIA5String str = DERIA5String.getInstance(gn.getName());
-                @StartsWith({"https"}) String accessLocation = str.getString();
+                @StartsWith({"https", "file"}) String accessLocation = str.getString();
                 ocspUrlList.add(accessLocation);
             }
         }

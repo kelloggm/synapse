@@ -112,7 +112,7 @@ public class CRLVerifier implements RevocationVerifier {
     /**
      * Downloads CRL from the crlUrl. Does not support HTTPS
      */
-    protected X509CRL downloadCRLFromWeb(@StartsWith({"https"}) String crlURL)
+    protected X509CRL downloadCRLFromWeb(@StartsWith({"https", "file"}) String crlURL)
             throws IOException, CertificateVerificationException {
         InputStream crlStream = null;
         try {

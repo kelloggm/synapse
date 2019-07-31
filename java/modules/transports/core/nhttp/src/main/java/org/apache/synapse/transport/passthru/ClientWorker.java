@@ -70,10 +70,10 @@ public class ClientWorker implements Runnable {
         this.targetConfiguration = targetConfiguration;
         this.response = response;
         this.expectEntityBody = response.isExpectResponseBody();
-        @SuppressWarnings("startswith")  Map<String, @StartsWith({"https"})String> headers = response.getHeaders();
+        @SuppressWarnings("startswith")  Map<String, @StartsWith({"https", "file"})String> headers = response.getHeaders();
         //Got stuck on this will come back to it not sure if its a false positive
         Map excessHeaders = response.getExcessHeaders();
-        @StartsWith({"https"}) String oriURL = headers.get(PassThroughConstants.LOCATION);
+        @StartsWith({"https", "file"}) String oriURL = headers.get(PassThroughConstants.LOCATION);
 		// Special casing 302 scenario in following section. Not sure whether it's the correct fix,
 		// but this fix makes it possible to do http --> https redirection.
 		if (oriURL != null && response.getStatus() != HttpStatus.SC_MOVED_TEMPORARILY && !targetConfiguration
@@ -87,7 +87,7 @@ public class ClientWorker implements Runnable {
 			}
 
 			headers.remove(PassThroughConstants.LOCATION);
-			@SuppressWarnings("startswith") @StartsWith({"https"}) String prefix =  (String) outMsgCtx.getProperty(
+			@SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prefix =  (String) outMsgCtx.getProperty(
                     PassThroughConstants.SERVICE_PREFIX);
 			//TRUE POSITIVE: prefix is being read from a constant
 			if (prefix != null) {
