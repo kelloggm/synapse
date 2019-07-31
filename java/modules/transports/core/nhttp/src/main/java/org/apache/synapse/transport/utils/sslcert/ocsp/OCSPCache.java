@@ -157,7 +157,7 @@ public class OCSPCache implements ManageableCache {
     }
 
     public synchronized void setCacheValue(BigInteger serialNumber, SingleResp singleResp, OCSPReq request,
-                                           @StartsWith({"https"}, "file") String serviceUrl) {
+                                           @StartsWith({"https", "file"}) String serviceUrl) {
         OCSPCacheValue cacheValue = new OCSPCacheValue(serialNumber, singleResp, request, serviceUrl);
         if (log.isDebugEnabled()) {
             log.debug("Before set - HashMap size " + hashMap.size());

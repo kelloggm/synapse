@@ -78,9 +78,9 @@ public class OCSPVerifier implements RevocationVerifier {
 
         OCSPReq request = generateOCSPRequest(issuerCert, peerCert.getSerialNumber());
         //This list will sometimes have non ocsp urls as well.
-        List<@StartsWith({"https"}, "file") String> locations = getAIALocations(peerCert);
+        List<@StartsWith({"https", "file"}) String> locations = getAIALocations(peerCert);
 
-        for (@StartsWith({"https"}, "file") String serviceUrl : locations) {
+        for (@StartsWith({"https", "file"}) String serviceUrl : locations) {
 
             SingleResp[] responses;
             try {
