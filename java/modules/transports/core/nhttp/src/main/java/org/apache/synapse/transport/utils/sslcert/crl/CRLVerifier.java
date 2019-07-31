@@ -36,6 +36,8 @@ import java.security.cert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * This is used to verify a certificate is revoked or not by using the Certificate Revocation
  * List published by the CA.
@@ -59,6 +61,8 @@ public class CRLVerifier implements RevocationVerifier {
      * @throws CertificateVerificationException
      *
      */
+
+    @SuppressWarnings({"startswith"}) //FALSE POSITIVE?
     public RevocationStatus checkRevocationStatus(X509Certificate peerCert, X509Certificate issuerCert)
             throws CertificateVerificationException {
 
@@ -68,7 +72,6 @@ public class CRLVerifier implements RevocationVerifier {
             if (log.isDebugEnabled()) {
                 log.debug("Trying to get CRL for URL: " + crlUrl);
             }
-
             if (cache != null) {
                 X509CRL x509CRL = cache.getCacheValue(crlUrl);
                 if (x509CRL != null) {
@@ -78,7 +81,6 @@ public class CRLVerifier implements RevocationVerifier {
                     return status;
                 }
             }
-
             //todo: Do we need to check if URL has the same domain name as issuerCert?
             try {
                 X509CRL x509CRL = downloadCRLFromWeb(crlUrl);
@@ -110,7 +112,7 @@ public class CRLVerifier implements RevocationVerifier {
     /**
      * Downloads CRL from the crlUrl. Does not support HTTPS
      */
-    protected X509CRL downloadCRLFromWeb(String crlURL)
+    protected X509CRL downloadCRLFromWeb(@StartsWith({"https"}) String crlURL)
             throws IOException, CertificateVerificationException {
         InputStream crlStream = null;
         try {

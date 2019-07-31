@@ -40,6 +40,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * A Simple HTTP GET based registry which will work with a Web Server / WebDAV
  * <p/>
@@ -60,9 +61,10 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
             log.debug("==> Repository fetch of resource with key : " + key);
 
         }
-        URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
+        @SuppressWarnings("startswith") URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
         if (url == null) {
             return null;
         }
@@ -145,9 +147,11 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         if (log.isDebugEnabled()) {
             log.debug("Perform RegistryEntry lookup for key : " + key);
         }
+        @SuppressWarnings("startswith")
         URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
         if (url == null) {
             return null;
         }
@@ -177,7 +181,9 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
 
     public void init(Properties properties) {
         super.init(properties);
-        String value = properties.getProperty("root");
+        @SuppressWarnings("startswith") @StartsWith({"https://", "file://"}) String value =
+                                                                            properties.getProperty("root");
+        //TRUE POSITIVE: value is read from the properties
         if (value != null) {
             // if the root is folder, it should always end with '/'
             // therefore, property keys do not have to begin with '/', which could be misleading
@@ -219,6 +225,8 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         return cachableDuration == null ? 1500 : Long.parseLong(cachableDuration);
     }
 
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
     public RegistryEntry[] getChildren(RegistryEntry entry) {
         URL url;
         if (entry == null) {

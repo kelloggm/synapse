@@ -26,13 +26,14 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * Holds the information about the HTTP request. Created on per request basis and
  * passed to each and every evaluator.
  */
 public class EvaluatorContext {
 
-    private String url;
+    private @StartsWith({"https", "file"}) String url;
     private Map<String, String> headers;
     private Map<String, String> params;
     private MessageContext messageContext;
@@ -43,7 +44,7 @@ public class EvaluatorContext {
      * @param url url
      * @param headers HTTP header as a Name, Value map
      */
-    public EvaluatorContext(String url, Map<String, String> headers) {
+    public EvaluatorContext(@StartsWith({"https", "file"}) String url, Map<String, String> headers) {
         this.url = url;
         this.headers = headers;
     }
@@ -52,7 +53,7 @@ public class EvaluatorContext {
      * Get the complete URL
      * @return URL
      */
-    public String getUrl() {
+    public @StartsWith({"https", "file"}) String getUrl() {
         return url;
     }
 
@@ -141,7 +142,7 @@ public class EvaluatorContext {
      * Set the URL
      * @param url to be set
      */
-    public void setUrl(String url) {
+    public void setUrl(@StartsWith({"https", "file"}) String url) {
         this.url = url;
     }
 

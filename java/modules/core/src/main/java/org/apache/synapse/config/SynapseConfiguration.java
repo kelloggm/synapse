@@ -581,6 +581,7 @@ public class SynapseConfiguration implements ManagedLifecycle, SynapseArtifact {
      *            its contents (or cached contents if the Entry refers to a
      *            dynamic resource off a remote registry)
      */
+    @SuppressWarnings("startswith")//TRUE POSITIVE: entry class doesn't ensure that URLs with only HTTPS protocol come
     public synchronized void addEntry(String key, Entry entry) {
 
         assertAlreadyExists(key, ENTRY);
@@ -608,6 +609,7 @@ public class SynapseConfiguration implements ManagedLifecycle, SynapseArtifact {
         }
     }
 
+    @SuppressWarnings("startswith")//TRUE POSITIVE: entry class doesn't ensure that URLs with only HTTPS protocol come
     public synchronized void updateEntry(String key, Entry entry) {
         if (entry.getType() == Entry.URL_SRC && entry.getValue() == null) {
             try {

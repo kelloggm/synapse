@@ -142,6 +142,7 @@ public class ServerHandler implements NHttpServerEventHandler {
      * Process a new incoming request
      * @param conn the connection
      */
+    @SuppressWarnings("startswith") //TRUE POSITIVE: As the code uses HTTP as the protocol
     public void requestReceived(final NHttpServerConnection conn) {
 
         HttpContext context = conn.getContext();

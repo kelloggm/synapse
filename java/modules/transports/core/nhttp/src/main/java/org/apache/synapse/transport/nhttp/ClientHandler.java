@@ -66,6 +66,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * The client connection handler. An instance of this class is used by each IOReactor, to
  * process every connection. Hence this class should not store any data related to a single
@@ -825,6 +827,8 @@ public class ClientHandler implements NHttpClientEventHandler {
         }
     }
 
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: It is read from a file and hence HTTP can creep in
     private void setHeaders(HttpContext context, HttpResponse response,
                             MessageContext outMsgCtx, MessageContext responseMsgCtx) {
         Header[] headers = response.getAllHeaders();

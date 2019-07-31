@@ -40,6 +40,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.net.URL;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * See build.xml for options
  */
@@ -109,7 +111,9 @@ public class StockQuoteClient {
         String mode = getProperty("mode", "quote");
         String addUrl = getProperty("addurl", null);
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                getProperty("prxurl", null);
+        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker
         String repo = getProperty("repository", "client_repo");
         String svcPolicy = getProperty("policy", null);
         String rest = getProperty("rest", null);

@@ -33,6 +33,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.net.URISyntaxException;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Represents a URL rewrite rule. A rule can consist of an optional condition
  * and one or more rewrite actions. If the condition is present, actions will be
@@ -53,7 +55,7 @@ public class RewriteRule {
                         MessageContext messageContext) throws URISyntaxException {
 
         if (condition != null) {
-            String uriString = fragments.toURIString();
+            @StartsWith({"https", "file"}) String uriString = fragments.toURIString();
             Map<String, String> headers = getHeaders(messageContext);
             EvaluatorContext ctx = new EvaluatorContext(uriString, headers);
             ctx.setProperties(((Axis2MessageContext) messageContext).getProperties());

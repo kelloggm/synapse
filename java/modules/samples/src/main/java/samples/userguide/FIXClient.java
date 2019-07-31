@@ -35,6 +35,7 @@ import java.util.Date;
 import java.io.File;
 import java.net.URL;
 
+import org.checkerframework.checker.startswith.qual.*;
 
 public class FIXClient {
 
@@ -64,7 +65,9 @@ public class FIXClient {
 
         String addUrl = getProperty("addurl", null);
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                                                                       getProperty("prxurl", null);
+        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker
         String repo = getProperty("repository", "client_repo");
         String qty = getProperty("qty", "1");
 

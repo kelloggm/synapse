@@ -58,6 +58,7 @@ import java.util.Properties;
 import java.util.List;
 import java.util.ArrayList;
 
+import org.checkerframework.checker.startswith.qual.*;
 
 @SuppressWarnings({"UnusedDeclaration"})
 public class SynapseConfigUtils {
@@ -287,7 +288,8 @@ public class SynapseConfigUtils {
      * @return an OMElement of the resource
      * @throws IOException for invalid URL's or IO errors
      */
-    public static OMNode getOMElementFromURL(String urlStr, String synapseHome) throws IOException {
+    public static OMNode getOMElementFromURL(@StartsWith({"https", "file"})String urlStr, String synapseHome)
+                                              throws IOException {
 
         URL url = getURLFromPath(urlStr, synapseHome);
         if (url == null) {
@@ -585,7 +587,7 @@ public class SynapseConfigUtils {
      * @param synapseHome synapse home parameter value to be used
      * @return Valid URL instance or null(if it is invalid or can not open a connection to it )
      */
-    public static URL getURLFromPath(String path, String synapseHome) {
+    public static URL getURLFromPath(@StartsWith({"https", "file"}) String path, String synapseHome) {
         if (path == null || "null".equals(path)) {
             if (log.isDebugEnabled()) {
                 log.debug("Can not create a URL from 'null' ");
@@ -664,7 +666,8 @@ public class SynapseConfigUtils {
         return baseURI;
     }
 
-    public static String resolveRelativeURI(String parentLocation, String relativeLocation) {
+    public static String resolveRelativeURI(@StartsWith({"https", "file"}) String parentLocation,
+                                            @StartsWith({"https", "file"}) String relativeLocation) {
 
         if (relativeLocation == null) {
             throw new IllegalArgumentException("Import URI cannot be null");
@@ -705,8 +708,11 @@ public class SynapseConfigUtils {
                     index = parentLocation.lastIndexOf("\\");
                 }
                 if (index != -1) {
-                    String basepath = parentLocation.substring(0, index + 1);
-                    String resolvedPath = basepath + relativeLocation;
+                    @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String basepath =
+                                                                               parentLocation.substring(0, index + 1);
+                    //FALSE POSITIVE: the substring starts at 0 index and hence will just get parentLocation's
+                    //annotation.
+                    @StartsWith({"https", "file"}) String resolvedPath = basepath + relativeLocation;
                     try {
                         URI resolvedUri = new URI(resolvedPath);
                         if (!resolvedUri.isAbsolute()) {

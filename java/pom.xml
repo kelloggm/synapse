@@ -200,7 +200,7 @@
 			<compilerArguments>
 			  <Xmaxerrs>10000</Xmaxerrs>
 			  <Xmaxwarns>10000</Xmaxwarns>
-			  <Astubs>${project.basedir}/stubs/</Astubs>
+			  <Astubs>C:\Users\siddh\Desktop\synapse\java\stubs</Astubs>
 			</compilerArguments>
 			<annotationProcessorPaths>
 			  <path>
@@ -226,13 +226,13 @@
 			  </path>
                 <path>
                     <groupId>org.checkerframework</groupId>
-                    <artifactId>HTTPSChecker</artifactId>
+                    <artifactId>StartsWithChecker</artifactId>
                     <version>0.1-snapshot</version>
                 </path>
 			</annotationProcessorPaths>
 			<annotationProcessors>
 			  <!-- Add all the checkers you want to enable here -->
-			  <annotationProcessor>org.checkerframework.checker.https.HTTPSChecker<!--com.amazon.checkerframework.compliance.kms.ComplianceChecker,com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker--></annotationProcessor>
+			  <annotationProcessor>org.checkerframework.checker.startswith.StartsWithChecker<!--com.amazon.checkerframework.compliance.kms.ComplianceChecker,com.amazon.checkerframework.cryptopolicy.CryptoPolicyComplianceChecker--></annotationProcessor>
 			</annotationProcessors>
                     </configuration>
                 </plugin>
@@ -1003,7 +1003,7 @@
 	    </dependency>-->
             <dependency>
                 <groupId>org.checkerframework</groupId>
-                <artifactId>HTTPSChecker</artifactId>
+                <artifactId>StartsWithChecker</artifactId>
                 <version>0.1-snapshot</version>
             </dependency>
 	    <!-- Annotations from the Checker Framework: nullness, interning, locking, ... -->

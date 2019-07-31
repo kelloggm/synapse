@@ -27,6 +27,8 @@ import org.apache.synapse.MessageContext;
 import java.net.URISyntaxException;
 import java.net.URI;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Represents a URL rewrite action. The action could be rewriting the entire URL
  * or rewriting a fragment of the URL.
@@ -47,6 +49,8 @@ public class RewriteAction {
     private int fragmentIndex = URIFragments.FULL_URI;
     private int actionType = ACTION_SET;
 
+    @SuppressWarnings("startswith")//TRUE POSITIVE: Code hard codes it to empty string which is not a permitted
+    //URI string.
     public void execute(URIFragments fragments,
                         MessageContext messageContext) throws URISyntaxException {
 

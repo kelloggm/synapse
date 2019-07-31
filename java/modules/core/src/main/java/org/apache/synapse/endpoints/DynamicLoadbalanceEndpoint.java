@@ -42,6 +42,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Represents a dynamic load balance endpoint. The application membership is not static,
  * but discovered through some mechanism such as using a GCF
@@ -251,7 +253,8 @@ public class DynamicLoadbalanceEndpoint extends LoadbalanceEndpoint {
         // e.g.  http://localhost:8080/example/index.html/example/index.html
         axis2MsgCtx.removeProperty(NhttpConstants.REST_URL_POSTFIX);
 
-        String transport = axis2MsgCtx.getTransportIn().getName();
+        @SuppressWarnings("startswith") @StartsWith("https") String transport = axis2MsgCtx.getTransportIn().getName();
+        //FALSE POSITIVE: Doesn't make sense to make a stub file for it as
         String address = synCtx.getTo().getAddress();
         int incomingPort = extractPort(synCtx, transport);
         EndpointReference to = getEndpointReferenceAfterURLRewrite(currentMember,
@@ -326,6 +329,7 @@ public class DynamicLoadbalanceEndpoint extends LoadbalanceEndpoint {
         }
     }
 
+    @SuppressWarnings("startswith") //TRUE POSITIVE: URL strings should never start with "http"
     private EndpointReference getEndpointReferenceAfterURLRewrite(Member currentMember,
                                                                   String transport,
                                                                   String address,

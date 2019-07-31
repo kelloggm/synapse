@@ -37,6 +37,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Factory for {@link ProxyService} instances.
  * <p/>
@@ -69,6 +71,7 @@ public class ProxyServiceFactory {
 
     private static final Log log = LogFactory.getLog(ProxyServiceFactory.class);
 
+    @SuppressWarnings("startswith")//TRUE POSITIVe: reads from the list of constants
     public static ProxyService createProxy(OMElement elem, Properties properties) {
 
         ProxyService proxy = null;

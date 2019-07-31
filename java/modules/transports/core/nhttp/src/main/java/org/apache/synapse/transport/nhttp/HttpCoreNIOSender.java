@@ -71,6 +71,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * NIO transport sender for Axis2 based on HttpCore and NIO extensions
  */
@@ -360,7 +362,6 @@ public class HttpCoreNIOSender extends AbstractHandler implements TransportSende
                 }
             }
             HttpHost httpHost = new HttpHost(host, port, url.getProtocol());
-
             Axis2HttpRequest axis2Req = new Axis2HttpRequest(epr, httpHost, msgContext);
             Object timeout = msgContext.getProperty(NhttpConstants.SEND_TIMEOUT);
             if (timeout != null && timeout instanceof Long) {

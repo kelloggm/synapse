@@ -34,6 +34,8 @@ import javax.xml.namespace.QName;
 import java.io.File;
 import java.net.URL;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 public class JSONClient {
 
     public static void main(String[] args) {
@@ -60,7 +62,9 @@ public class JSONClient {
 
         String addUrl = getProperty("addurl", "http://localhost:8280/services/JSONProxy");
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                getProperty("prxurl", null);
+        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker
         String repo = getProperty("repository", "client_repo");
         String symbol = getProperty("symbol", "IBM");
 

@@ -1,7 +1,0 @@
-import org.checkerframework.checker.https.qual.*;
-
-package java.net;
-
-class URL{
-    public URL(@HTTPS String spec);
-}

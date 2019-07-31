@@ -46,6 +46,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Comparator;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 public class ClientWorker implements Runnable {
 
     private static final Log log = LogFactory.getLog(ClientWorker.class);
@@ -68,12 +70,10 @@ public class ClientWorker implements Runnable {
         this.targetConfiguration = targetConfiguration;
         this.response = response;
         this.expectEntityBody = response.isExpectResponseBody();
-
-        Map<String,String> headers = response.getHeaders();
+        @SuppressWarnings("startswith")  Map<String, @StartsWith({"https"})String> headers = response.getHeaders();
+        //Got stuck on this will come back to it not sure if its a false positive
         Map excessHeaders = response.getExcessHeaders();
-      
-		String oriURL = headers.get(PassThroughConstants.LOCATION);
-		
+        @StartsWith({"https"}) String oriURL = headers.get(PassThroughConstants.LOCATION);
 		// Special casing 302 scenario in following section. Not sure whether it's the correct fix,
 		// but this fix makes it possible to do http --> https redirection.
 		if (oriURL != null && response.getStatus() != HttpStatus.SC_MOVED_TEMPORARILY && !targetConfiguration
@@ -87,8 +87,9 @@ public class ClientWorker implements Runnable {
 			}
 
 			headers.remove(PassThroughConstants.LOCATION);
-			String prefix =  (String) outMsgCtx.getProperty(
+			@SuppressWarnings("startswith") @StartsWith({"https"}) String prefix =  (String) outMsgCtx.getProperty(
                     PassThroughConstants.SERVICE_PREFIX);
+			//TRUE POSITIVE: prefix is being read from a constant
 			if (prefix != null) {
 				headers.put(PassThroughConstants.LOCATION, prefix + url.getFile());
 			}

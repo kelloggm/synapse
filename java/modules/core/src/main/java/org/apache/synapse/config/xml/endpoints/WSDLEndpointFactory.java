@@ -38,6 +38,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Creates an {@link WSDLEndpoint} based endpoint from a XML configuration.
  * <p>
@@ -80,6 +82,8 @@ public class WSDLEndpointFactory extends DefaultEndpointFactory {
         return instance;
     }
 
+    @SuppressWarnings("startswith")//TRUE POSITIVE: read from a file/constants list and cannot be guaranteed to enforce
+                                   //the rule set for URI
     protected Endpoint createEndpoint(OMElement epConfig, boolean anonymousEndpoint,
                                       Properties properties) {
 

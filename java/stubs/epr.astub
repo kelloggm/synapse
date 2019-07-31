@@ -1,0 +1,12 @@
+package org.apache.axis2.addressing;
+
+import org.checkerframework.checker.startswith.qual.*;
+
+class EndpointReference{
+    public @StartsWith({"https"}) String getAddress(String this);
+}
+
+package org.apache.synapse.endpoints;
+class EndpointDefinition{
+    public @StartsWith({"https"}) String getAddress(String this);
+}

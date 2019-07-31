@@ -28,6 +28,8 @@ import org.apache.synapse.config.SynapseConfigUtils;
 import org.apache.synapse.config.SynapseConfiguration;
 import org.xml.sax.InputSource;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Class that adapts a {@link ResourceMap} to JAXP's {@link URIResolver}.
  */
@@ -54,7 +56,10 @@ public class CustomJAXPURIResolver implements URIResolver {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    public Source resolve(String href, String base) throws TransformerException {
+    @SuppressWarnings("startswith")//FALSE POSITIVE: method cannot be overriden because of different
+                                   //annotations on params
+    public Source resolve(@StartsWith({"https", "file"}) String href,
+                          @StartsWith({"https", "file"}) String base) throws TransformerException {
         Source result = null;
         if (resourceMap != null) {
             InputSource is = resourceMap.resolve(synCfg, href);

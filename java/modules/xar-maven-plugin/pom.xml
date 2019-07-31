@@ -74,7 +74,7 @@
 	</dependency>-->
         <dependency>
             <groupId>org.checkerframework</groupId>
-            <artifactId>HTTPSChecker</artifactId>
+            <artifactId>StartsWithChecker</artifactId>
             <version>0.1-snapshot</version>
         </dependency>
     </dependencies>

@@ -37,6 +37,8 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Factory for {@link Entry} instances.
  */
@@ -83,9 +85,9 @@ public class EntryFactory implements XMLToObjectMapper {
                 descriptionElem.detach();
             }
 
-            String src  = elem.getAttributeValue(
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String src  = elem.getAttributeValue(
                     new QName(XMLConfigConstants.NULL_NAMESPACE, "src"));
-
+            //TRUE POSITIVE: HTTP can creep in as URL is being loaded from the source
             // if a src attribute is present, this is a URL source resource,
             // it would now be loaded from the URL source, as all static properties
             // are initialized at startup

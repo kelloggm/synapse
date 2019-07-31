@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * This class represents a response coming from the target server.
  */
@@ -39,7 +40,7 @@ public class TargetResponse {
     private Pipe pipe = null;
 
     /** Headers of the response */
-    private Map<String, String> headers = new HashMap<String, String>();
+    private Map<String, @StartsWith({"https"}) String> headers = new HashMap<String, @StartsWith({"https"}) String>();
 
     /** The status of the response */
     private int status = HttpStatus.SC_OK;
@@ -136,7 +137,7 @@ public class TargetResponse {
         return headers.get(name);
     }
 
-    public Map<String, String> getHeaders() {
+    public Map<String, @StartsWith({"https"}) String> getHeaders() {
         return headers;
     }
 

@@ -25,6 +25,8 @@ import org.xml.sax.InputSource;
 
 import javax.wsdl.xml.WSDLLocator;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Class that adapts a {@link ResourceMap} object to {@link WSDLLocator}.
  */
@@ -67,7 +69,10 @@ public class CustomWSDLLocator implements WSDLLocator {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    public InputSource getImportInputSource(String parentLocation, String relativeLocation) {
+    @SuppressWarnings("startswith")//FALSE POSITIVE: method cannot be overriden because of different
+                                   //annotations on params
+    public InputSource getImportInputSource(@StartsWith({"https", "file"}) String parentLocation,
+                                            @StartsWith({"https", "file"}) String relativeLocation) {
         InputSource result = null;
         if (resourceMap != null) {
             result = resourceMap.resolve(synCfg, relativeLocation);

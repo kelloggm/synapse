@@ -36,6 +36,8 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Creates {@link org.apache.synapse.endpoints.DynamicLoadbalanceEndpoint} using an XML configuration.
  * <p/>
@@ -82,6 +84,7 @@ public class ServiceDynamicLoadbalanceEndpointFactory extends EndpointFactory {
         return instance;
     }
 
+    @SuppressWarnings({"startswith"}) //TRUE POSITIVE: Reads URI object from a constant list that we don't check
     protected Endpoint createEndpoint(OMElement epConfig, boolean anonymousEndpoint,
                                       Properties properties) {
 

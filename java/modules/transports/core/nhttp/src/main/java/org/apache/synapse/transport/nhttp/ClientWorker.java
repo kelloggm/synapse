@@ -49,6 +49,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * Performs processing of the HTTP response received for our outgoing request. An instance of this
  * class is created to process each unique response.
@@ -77,6 +78,8 @@ public class ClientWorker implements Runnable {
      * @param outMsgCtx the original outgoing message context (i.e. corresponding request)
      * @param endpointURLPrefix The endpoint URL prefix
      */
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: It is read from a file and hence HTTP can creep in
     public ClientWorker(ConfigurationContext cfgCtx, InputStream in,
         HttpResponse response, MessageContext outMsgCtx, String endpointURLPrefix) {
 

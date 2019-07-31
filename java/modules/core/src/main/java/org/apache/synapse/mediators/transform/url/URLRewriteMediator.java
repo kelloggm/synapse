@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * A mediator capable of rewriting URLs in messages. The input URL can be
  * extracted from the To header of the message or any of the message properties.
@@ -71,6 +73,8 @@ public class URLRewriteMediator extends AbstractMediator {
         return true;
     }
 
+    @SuppressWarnings("startswith")//TRUE POSITIVE: Reads URL from a source and hence checker cannot fullfill the
+                                   //guarantee
     private URI getInputAddress(MessageContext messageContext) {
         String uriString = null;
         if (inputProperty != null) {

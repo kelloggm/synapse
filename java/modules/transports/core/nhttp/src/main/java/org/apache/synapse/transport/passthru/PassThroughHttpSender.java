@@ -74,6 +74,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * PassThroughHttpSender for Synapse based on HttpCore and NIO extensions
  */

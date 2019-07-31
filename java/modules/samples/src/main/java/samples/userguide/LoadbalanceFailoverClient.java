@@ -46,6 +46,8 @@ import java.io.File;
 import java.net.URL;
 import java.net.MalformedURLException;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 public class LoadbalanceFailoverClient {
 
     private final static String COOKIE = "Cookie";
@@ -87,8 +89,9 @@ public class LoadbalanceFailoverClient {
         String pIterations = getProperty("i", null);
         String addUrl = getProperty("addurl", null);
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
-
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                getProperty("prxurl", null);
+        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker;
         String sleep = getProperty("sleep", null);
 
 
@@ -208,7 +211,9 @@ public class LoadbalanceFailoverClient {
         String pIterations = getProperty("i", null);
         String addUrl = getProperty("addurl", null);
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                getProperty("prxurl", null);
+        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker
         String sleep = getProperty("sleep", null);
         String session = getProperty("session", null);
 
