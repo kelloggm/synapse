@@ -253,8 +253,7 @@ public class DynamicLoadbalanceEndpoint extends LoadbalanceEndpoint {
         // e.g.  http://localhost:8080/example/index.html/example/index.html
         axis2MsgCtx.removeProperty(NhttpConstants.REST_URL_POSTFIX);
 
-        @SuppressWarnings("startswith") @StartsWith("https") String transport = axis2MsgCtx.getTransportIn().getName();
-        //FALSE POSITIVE: Doesn't make sense to make a stub file for it as
+        String transport = axis2MsgCtx.getTransportIn().getName();
         String address = synCtx.getTo().getAddress();
         int incomingPort = extractPort(synCtx, transport);
         EndpointReference to = getEndpointReferenceAfterURLRewrite(currentMember,

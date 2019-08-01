@@ -71,7 +71,6 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
     private static final String SOAP12 = "soap12";
     private static final String POX = "pox";
 
-    @SuppressWarnings("startswith") //TRUE POSITIVE
     public Mediator createSpecificMediator(OMElement elem, Properties properties) {
 
         FaultMediator faultMediator = new FaultMediator();
@@ -163,7 +162,13 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
         OMElement node = elem.getFirstChildWithName(NODE_Q);
         if (node != null && node.getText() != null) {
             try {
-                faultMediator.setFaultNode(new URI(node.getText()));
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri =
+                                                                               node.getText();
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. Although the child
+                //should be a valid URI but it is not guaranteed to have an accepted protocol. More information can be
+                //found about the document on
+                // https://ws.apache.org/axiom/apidocs/org/apache/axiom/om/OMContainer.html#getFirstChildWithName-javax.xml.namespace.QName-
+                faultMediator.setFaultNode(new URI(uri));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault node : " + node.getText(), e);
             }
@@ -172,7 +177,13 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
         OMElement role = elem.getFirstChildWithName(ROLE_Q);
         if (role != null && role.getText() != null) {
             try {
-                faultMediator.setFaultRole(new URI(role.getText()));
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri2 =
+                                                                               role.getText();
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. Although the child
+                //should be a valid URI but it is not guaranteed to have an accepted protocol. More information can be
+                //found about the document on
+                // https://ws.apache.org/axiom/apidocs/org/apache/axiom/om/OMContainer.html#getFirstChildWithName-javax.xml.namespace.QName-
+                faultMediator.setFaultRole(new URI(uri2));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault role : " + role.getText(), e);
             }

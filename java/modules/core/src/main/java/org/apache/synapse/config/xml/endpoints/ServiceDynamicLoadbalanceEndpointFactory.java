@@ -84,7 +84,6 @@ public class ServiceDynamicLoadbalanceEndpointFactory extends EndpointFactory {
         return instance;
     }
 
-    @SuppressWarnings({"startswith"}) //TRUE POSITIVE: Reads URI object from a constant list that we don't check
     protected Endpoint createEndpoint(OMElement epConfig, boolean anonymousEndpoint,
                                       Properties properties) {
 
@@ -106,7 +105,12 @@ public class ServiceDynamicLoadbalanceEndpointFactory extends EndpointFactory {
             // Load the file
             OMXMLParserWrapper builder = null;
             try {
-                builder = OMXMLBuilderFactory.createOMBuilder(new URL(configuration).openStream());
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String url = configuration;
+                //TRUE POSITIVE: The url of the ServiceDynamicLoadBalanceEndpoint config file is read from the
+                //Endpoint Configuration and hence doesn't guarantee that URLs start with the accepted protocols. More
+                //information can be found on
+                //https://synapse.apache.org/userguide/config.html#WSDLEndpointConfig.
+                builder = OMXMLBuilderFactory.createOMBuilder(new URL(url).openStream());
             } catch (Exception e) {
                 handleException("Could not load ServiceDynamicLoadbalanceEndpoint configuration file " +
                                 configuration);

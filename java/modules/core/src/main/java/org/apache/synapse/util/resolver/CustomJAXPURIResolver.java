@@ -56,8 +56,6 @@ public class CustomJAXPURIResolver implements URIResolver {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    @SuppressWarnings("startswith")//FALSE POSITIVE: method cannot be overriden because of different
-                                   //annotations on params
     public Source resolve(@StartsWith({"https", "file"}) String href,
                           @StartsWith({"https", "file"}) String base) throws TransformerException {
         Source result = null;

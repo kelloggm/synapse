@@ -68,7 +68,7 @@ public class RESTUtils {
     }
 
     @SuppressWarnings({"startswith"})
-    //TRUE POSITIVE: URL are being read from constants and url is checked for having "://"
+    //Need help with this comment
     public static String getFullRequestPath(MessageContext synCtx) {
         Object obj = synCtx.getProperty(RESTConstants.REST_FULL_REQUEST_PATH);
         if (obj != null) {

@@ -55,7 +55,7 @@ public class RewriteRule {
                         MessageContext messageContext) throws URISyntaxException {
 
         if (condition != null) {
-            @StartsWith({"https", "file"}) String uriString = fragments.toURIString();
+            String uriString = fragments.toURIString();
             Map<String, String> headers = getHeaders(messageContext);
             EvaluatorContext ctx = new EvaluatorContext(uriString, headers);
             ctx.setProperties(((Axis2MessageContext) messageContext).getProperties());

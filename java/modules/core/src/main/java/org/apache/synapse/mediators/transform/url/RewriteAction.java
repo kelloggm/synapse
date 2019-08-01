@@ -27,8 +27,6 @@ import org.apache.synapse.MessageContext;
 import java.net.URISyntaxException;
 import java.net.URI;
 
-import org.checkerframework.checker.startswith.qual.*;
-
 /**
  * Represents a URL rewrite action. The action could be rewriting the entire URL
  * or rewriting a fragment of the URL.

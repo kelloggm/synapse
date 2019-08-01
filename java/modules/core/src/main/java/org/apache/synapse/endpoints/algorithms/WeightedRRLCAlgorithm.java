@@ -38,8 +38,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.net.URL;
 import java.net.MalformedURLException;
 
-import org.checkerframework.checker.startswith.qual.*;
-
 /**
  * This is a Weighted Round Robin Least Connection algorithm.</p>
  *

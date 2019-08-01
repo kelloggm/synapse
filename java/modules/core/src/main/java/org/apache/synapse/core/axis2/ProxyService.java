@@ -60,7 +60,6 @@ import java.net.URI;
 import java.net.URL;
 import java.util.*;
 
-import org.checkerframework.checker.startswith.qual.*;
 /**
  * <proxy-service name="string" [transports="(http |https |jms )+|all"] [trace="enable|disable"]>
  *    <description>..</description>?
@@ -264,6 +263,7 @@ public class ProxyService implements AspectConfigurable, SynapseArtifact {
             try {
             	URL url = wsdlURI.toURL();
                 publishWSDL = url.toString();
+
                 OMNode node = SynapseConfigUtils.getOMElementFromURL(publishWSDL, synapseHome);
                 if (node instanceof OMElement) {
                     wsdlElement = (OMElement) node;

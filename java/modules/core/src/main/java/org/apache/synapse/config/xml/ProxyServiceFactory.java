@@ -71,7 +71,6 @@ public class ProxyServiceFactory {
 
     private static final Log log = LogFactory.getLog(ProxyServiceFactory.class);
 
-    @SuppressWarnings("startswith")//TRUE POSITIVe: reads from the list of constants
     public static ProxyService createProxy(OMElement elem, Properties properties) {
 
         ProxyService proxy = null;
@@ -235,7 +234,11 @@ public class ProxyServiceFactory {
                         new QName(XMLConfigConstants.NULL_NAMESPACE, "uri"));
                 if (wsdlURI != null) {
                     try {
-                        proxy.setWsdlURI(new URI(wsdlURI.getAttributeValue()));
+                        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri = wsdlURI.getAttributeValue();
+                        //TRUE POSITIVE: The URI is looked up from the WSDL Endpoint but it is not guaranteed to only have accepted
+                        //protocols. The uri attribute in the WSDL Endpoint represents the URI and more information can be found on
+                        //https://synapse.apache.org/userguide/config.html#WSDLEndpointConfig.
+                        proxy.setWsdlURI(new URI(uri));
                     } catch (URISyntaxException e) {
                         String msg = "Error creating uri for proxy service wsdl";
                         log.error(msg);

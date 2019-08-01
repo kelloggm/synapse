@@ -87,7 +87,9 @@ public class EntryFactory implements XMLToObjectMapper {
 
             @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String src  = elem.getAttributeValue(
                     new QName(XMLConfigConstants.NULL_NAMESPACE, "src"));
-            //TRUE POSITIVE: HTTP can creep in as URL is being loaded from the source
+            //TRUE POSITIVE: The URL is looked up from the local registry but it is not guaranteed to only have accepted
+            //protocols. The src attribute in the local registry represents the URL and more information can be found on
+            //https://synapse.apache.org/userguide/config.html#LocalEntryConfig.
             // if a src attribute is present, this is a URL source resource,
             // it would now be loaded from the URL source, as all static properties
             // are initialized at startup

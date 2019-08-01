@@ -64,7 +64,9 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         @SuppressWarnings("startswith") URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
-        //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }
@@ -151,7 +153,9 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
-        //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }
@@ -181,9 +185,12 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
 
     public void init(Properties properties) {
         super.init(properties);
-        @SuppressWarnings("startswith") @StartsWith({"https://", "file://"}) String value =
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String value =
                                                                             properties.getProperty("root");
-        //TRUE POSITIVE: value is read from the properties
+        //TRUE POSITIVE: value is always set to the root server URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But the URL is not guaranteed to have the accepted protocols and is it not checked for the same anywhere in
+        //code.
         if (value != null) {
             // if the root is folder, it should always end with '/'
             // therefore, property keys do not have to begin with '/', which could be misleading

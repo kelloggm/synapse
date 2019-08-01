@@ -1,0 +1,7 @@
+package javax.xml.transform;
+import org.checkerframework.checker.startswith.qual.*;
+
+class URIResolver{
+    Source resolve(URIResolver this, @StartsWith({"https", "file"}) String href,
+                          @StartsWith({"https", "file"}) String base) throws TransformerException;
+}
