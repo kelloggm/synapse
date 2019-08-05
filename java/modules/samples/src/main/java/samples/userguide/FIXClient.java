@@ -67,7 +67,9 @@ public class FIXClient {
         String trpUrl = getProperty("trpurl", null);
         @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
                                                                        getProperty("prxurl", null);
-        //TRUE POSITIVE: url is read from the system and hence cannot guarantee the properties guaranteed by the checker
+        //TRUE POSITIVE: getProperty returns what is associated with the key (in this case "prxurl"). In this case it
+        //will be the proxy url as seen on https://synapse.apache.org/Synapse_Samples_Setup.html which can also be HTTP
+        //which is not valid according to our checker.
         String repo = getProperty("repository", "client_repo");
         String qty = getProperty("qty", "1");
 

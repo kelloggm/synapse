@@ -69,8 +69,6 @@ public class CustomWSDLLocator implements WSDLLocator {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    @SuppressWarnings("startswith")//FALSE POSITIVE: method cannot be overriden because of different
-                                   //annotations on params
     public InputSource getImportInputSource(@StartsWith({"https", "file"}) String parentLocation,
                                             @StartsWith({"https", "file"}) String relativeLocation) {
         InputSource result = null;

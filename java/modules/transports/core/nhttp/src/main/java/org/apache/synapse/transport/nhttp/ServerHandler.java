@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * The server connection handler. An instance of this class is used by each IOReactor, to
  * process every connection. Hence this class should not store any data related to a single
@@ -142,7 +143,6 @@ public class ServerHandler implements NHttpServerEventHandler {
      * Process a new incoming request
      * @param conn the connection
      */
-    @SuppressWarnings("startswith") //TRUE POSITIVE: As the code uses HTTP as the protocol
     public void requestReceived(final NHttpServerConnection conn) {
 
         HttpContext context = conn.getContext();
@@ -203,8 +203,9 @@ public class ServerHandler implements NHttpServerEventHandler {
                     headers.put(header.getName(), header.getValue());
                 }
 
+                @StartsWith({"https", "file"}) String uri = request.getRequestLine().getUri();
                 EvaluatorContext evaluatorContext =
-                        new EvaluatorContext(request.getRequestLine().getUri(), headers);
+                        new EvaluatorContext(uri, headers);
                 int priority = parser.parse(evaluatorContext);
                 executor.execute(worker, priority);
             }

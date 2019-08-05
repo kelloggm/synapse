@@ -73,8 +73,9 @@ public class URLRewriteMediator extends AbstractMediator {
         return true;
     }
 
-    @SuppressWarnings("startswith")//TRUE POSITIVE: Reads URL from a source and hence checker cannot fullfill the
-                                   //guarantee
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: uristring starts with being null so should we annotate it to @StartsWithBottom because it later
+    //takes on a value of a uri string?
     private URI getInputAddress(MessageContext messageContext) {
         String uriString = null;
         if (inputProperty != null) {

@@ -89,7 +89,9 @@ public class ClientWorker implements Runnable {
 			headers.remove(PassThroughConstants.LOCATION);
 			@SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prefix =  (String) outMsgCtx.getProperty(
                     PassThroughConstants.SERVICE_PREFIX);
-			//TRUE POSITIVE: prefix is being read from a constant
+			//TRUE POSITIVE: prefix is being read from a constant that has no documentation about it so it can be a
+            //false positive too
+
 			if (prefix != null) {
 				headers.put(PassThroughConstants.LOCATION, prefix + url.getFile());
 			}

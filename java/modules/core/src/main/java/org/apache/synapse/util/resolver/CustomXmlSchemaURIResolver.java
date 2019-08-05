@@ -57,8 +57,6 @@ public class CustomXmlSchemaURIResolver implements URIResolver {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    @SuppressWarnings("startswith")//FALSE POSITIVE: method declaration can't override because of different annotations
-                                   //on the parameters.
     public InputSource resolveEntity(String targetNamespace, @StartsWith({"https", "file"}) String schemaLocation,
                                                              @StartsWith({"https", "file"}) String baseUri) {
         InputSource result = null;

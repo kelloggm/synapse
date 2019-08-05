@@ -827,8 +827,6 @@ public class ClientHandler implements NHttpClientEventHandler {
         }
     }
 
-    @SuppressWarnings("startswith")
-    //TRUE POSITIVE: It is read from a file and hence HTTP can creep in
     private void setHeaders(HttpContext context, HttpResponse response,
                             MessageContext outMsgCtx, MessageContext responseMsgCtx) {
         Header[] headers = response.getAllHeaders();
@@ -840,9 +838,16 @@ public class ClientHandler implements NHttpClientEventHandler {
                     return o1.compareToIgnoreCase(o2);
                 }
             });
-            String endpointURLPrefix = (String) context.getAttribute(NhttpConstants.ENDPOINT_PREFIX);
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String endpointURLPrefix =
+                    (String) context.getAttribute(NhttpConstants.ENDPOINT_PREFIX);
+            //TRUE POSITIVE: There is no documentation available on HttpContext but it can be inferred that a URL string
+            //is returned but the url string is not guaranteed to have one of the accepted protocols.
 
-            String servicePrefix = (String) outMsgCtx.getProperty(NhttpConstants.SERVICE_PREFIX);
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String servicePrefix =
+                    (String) outMsgCtx.getProperty(NhttpConstants.SERVICE_PREFIX);
+            //TRUE POSITIVE: object of MessageContext class searches for property with name SERVICE_PREFIX which should
+            //be an URI but it is not guaranteed to start with a valid URI string. (Explanation seems to be wrong but
+            //there is no documentation explaining the meaning of these constants).
             for (int i = 0; i < headers.length; i++) {
                 Header header = headers[i];
                 if ("Location".equals(header.getName())
@@ -855,7 +860,12 @@ public class ClientHandler implements NHttpClientEventHandler {
                     try {
                         URI serviceURI = new URI(servicePrefix);
                         URI endpointURI = new URI(endpointURLPrefix);
-                        URI locationURI = new URI(header.getValue());
+                        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String headerUri =
+                                                                                       header.getValue();
+                        //TRUE POSITIVE: Header is an interface that represents a HTTP Header field and the value
+                        //returns the URI as seen in https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/Header.html.
+                        //The URI returned is not guaranteed to have one of the accepted protocols.
+                        URI locationURI = new URI(headerUri);
 
                         if (locationURI.getHost().equalsIgnoreCase(endpointURI.getHost())) {
                             URI newURI = new URI(locationURI.getScheme(), locationURI.getUserInfo(),
@@ -930,7 +940,9 @@ public class ClientHandler implements NHttpClientEventHandler {
 
         ContentInputBuffer inputBuffer = null;
         MessageContext outMsgContext = (MessageContext) context.getAttribute(OUTGOING_MESSAGE_CONTEXT);
-        String endptPrefix = (String) context.getAttribute(NhttpConstants.ENDPOINT_PREFIX);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String endptPrefix = (String) context.getAttribute(NhttpConstants.ENDPOINT_PREFIX);
+        //TRUE POSITIVE: There is no documentation available on HttpContext but it can be inferred that a URL string
+        //is returned but the url string is not guaranteed to have one of the accepted protocols.
         String requestMethod = (String) context.getAttribute(NhttpConstants.HTTP_REQ_METHOD);
         int statusCode = response.getStatusLine().getStatusCode();
 

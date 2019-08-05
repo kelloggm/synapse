@@ -48,7 +48,7 @@ public class RewriteAction {
     private int actionType = ACTION_SET;
 
     @SuppressWarnings("startswith")//TRUE POSITIVE: Code hard codes it to empty string which is not a permitted
-    //URI string.
+    //URI string. Not sure why they set it to an empty string. No documentation avalaible on the method.
     public void execute(URIFragments fragments,
                         MessageContext messageContext) throws URISyntaxException {
 

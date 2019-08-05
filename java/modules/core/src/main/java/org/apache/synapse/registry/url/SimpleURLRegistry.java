@@ -232,18 +232,18 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         return cachableDuration == null ? 1500 : Long.parseLong(cachableDuration);
     }
 
-    @SuppressWarnings("startswith")
-    //TRUE POSITIVE: It is possible that http creeps in cause we don't know how root is changed
     public RegistryEntry[] getChildren(RegistryEntry entry) {
-        URL url;
         if (entry == null) {
             RegistryEntryImpl entryImpl = new RegistryEntryImpl();
             entryImpl.setKey("");
             entry = entryImpl;
         }
-        url = SynapseConfigUtils.getURLFromPath(root + entry.getKey(), properties.get(
+        @SuppressWarnings("startswith") URL url = SynapseConfigUtils.getURLFromPath(root + entry.getKey(), properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }

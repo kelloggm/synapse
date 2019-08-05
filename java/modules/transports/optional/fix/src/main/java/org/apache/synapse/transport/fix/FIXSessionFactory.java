@@ -401,7 +401,6 @@ public class FIXSessionFactory {
 
     /**
      * Get the FIX configuration URL from the services.xml.
-     *
      * @param service the AxisService
      * @param acceptor boolean value indicating the FIX application type
      * @return an InputStream to the FIX configuration file/resource
