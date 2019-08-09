@@ -23,7 +23,7 @@ package org.apache.synapse;
  */
 public interface Nameable {
     /**
- * Get the name of an abstraction
+     * Get the name of an abstraction
      *
      * @return String Representation of name
      */

@@ -164,10 +164,10 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
             try {
                 @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri =
                                                                                node.getText();
-                //TRUE POSITIVE:The child is picked up from the document by matching the name. Although the child
-                //should be a valid URI but it is not guaranteed to have an accepted protocol. More information can be
-                //found about the document on
-                // https://ws.apache.org/axiom/apidocs/org/apache/axiom/om/OMContainer.html#getFirstChildWithName-javax.xml.namespace.QName-
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. The value of the
+                //SYNAPSE_NAMESPACE constant is hard coded to a URL with protocol "http" that is against the guarantee
+                //of the checker. More information can be found in the config list here:
+                //https://synapse.apache.org/apidocs/constant-values.html#org.apache.synapse.config.xml.XMLConfigConstants.SYNAPSE_NAMESPACE
                 faultMediator.setFaultNode(new URI(uri));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault node : " + node.getText(), e);
@@ -179,10 +179,10 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
             try {
                 @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri2 =
                                                                                role.getText();
-                //TRUE POSITIVE:The child is picked up from the document by matching the name. Although the child
-                //should be a valid URI but it is not guaranteed to have an accepted protocol. More information can be
-                //found about the document on
-                // https://ws.apache.org/axiom/apidocs/org/apache/axiom/om/OMContainer.html#getFirstChildWithName-javax.xml.namespace.QName-
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. The value of the
+                //SYNAPSE_NAMESPACE constant is hard coded to a URL with protocol "http" that is against the guarantee
+                //of the checker. More information can be found in the config list here:
+                //https://synapse.apache.org/apidocs/constant-values.html#org.apache.synapse.config.xml.XMLConfigConstants.SYNAPSE_NAMESPACE
                 faultMediator.setFaultRole(new URI(uri2));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault role : " + role.getText(), e);

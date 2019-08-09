@@ -34,6 +34,9 @@ public class URLTextRetriever implements SourceTextRetriever {
 
     private EvaluatorConstants.URI_FRAGMENTS fragment = null;
 
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: EvaluatorContext.getUrl() will always return a URL with protocol "http" which is against the
+    //property guaranteed by the checker.
     public String getSourceText(EvaluatorContext context) throws EvaluatorException {
         if (fragment == null) {
             return context.getUrl();

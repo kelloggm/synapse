@@ -26,14 +26,16 @@ import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.checkerframework.checker.startswith.qual.*;
 /**
  * Holds the information about the HTTP request. Created on per request basis and
  * passed to each and every evaluator.
  */
+@SuppressWarnings("startswith")
+//TRUE POSITIVE: The whole class as can be seen from the class comment uses HTTP as the protocol. More information can
+//be found on-https://synapse.apache.org/apidocs/org/apache/synapse/commons/evaluators/EvaluatorContext.html
 public class EvaluatorContext {
 
-    private @StartsWith({"https", "file"}) String url;
+    private String url;
     private Map<String, String> headers;
     private Map<String, String> params;
     private MessageContext messageContext;
@@ -44,7 +46,7 @@ public class EvaluatorContext {
      * @param url url
      * @param headers HTTP header as a Name, Value map
      */
-    public EvaluatorContext(@StartsWith({"https", "file"}) String url, Map<String, String> headers) {
+    public EvaluatorContext(String url, Map<String, String> headers) {
         this.url = url;
         this.headers = headers;
     }
@@ -53,7 +55,7 @@ public class EvaluatorContext {
      * Get the complete URL
      * @return URL
      */
-    public @StartsWith({"https", "file"}) String getUrl() {
+    public String getUrl() {
         return url;
     }
 
@@ -142,7 +144,7 @@ public class EvaluatorContext {
      * Set the URL
      * @param url to be set
      */
-    public void setUrl(@StartsWith({"https", "file"}) String url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 

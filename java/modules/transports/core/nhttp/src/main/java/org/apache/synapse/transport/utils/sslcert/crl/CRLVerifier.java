@@ -172,7 +172,7 @@ public class CRLVerifier implements RevocationVerifier {
             //get ASN1Encodable DistributionPointName
             DistributionPointName dpn = dp.getDistributionPoint();
             if (dpn != null && dpn.getType() == DistributionPointName.FULL_NAME) {
-                //Create ASN1Encodable General Nam es
+                //Create ASN1Encodable General Names
                 GeneralName[] genNames = GeneralNames.getInstance(dpn.getName()).getNames();
                 // Look for a URI
                 //todo: May be able to check for OCSP url specifically.
@@ -184,9 +184,10 @@ public class CRLVerifier implements RevocationVerifier {
                                 DERIA5String.getInstance(genName.getName()).getString().trim();
                         //TRUE POSITIVE: String returned wouldn't always be a URI and hence we can't make a stub file
                         //for it but we know here it will be a URI because of the check-
-                        //(genName.getTagNo() == GeneralName.uniformResourceIdentifier). More information can be found on-
-                        //https://people.eecs.berkeley.edu/~jonah/bc/org/bouncycastle/asn1/x509/GeneralName.html#getTagNo()
-                        //It is still not guaranteed that the url string will only have the accepted protocols.
+                        //(genName.getTagNo() == GeneralName.uniformResourceIdentifier).
+                        // It is still not guaranteed that the url string will only have the accepted protocols.
+                        // More information can be found on-
+                        //https://people.eecs.berkeley.edu/~jonah/bc/org/bouncycastle/asn1/x509/GeneralName.html#getTagNo(
                         crlUrls.add(url);
                     }
                 }

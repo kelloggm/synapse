@@ -116,9 +116,8 @@ public class CRLCache implements ManageableCache {
         }
 
         try {
-            @StartsWith({"https", "file"}) String crlUrl = cacheValue.crlUrl;
-            X509CRL x509CRL = crlVerifier.downloadCRLFromWeb(crlUrl);
-            this.setCacheValue(crlUrl, x509CRL);
+            X509CRL x509CRL = crlVerifier.downloadCRLFromWeb(cacheValue.crlUrl);
+            this.setCacheValue(cacheValue.crlUrl, x509CRL);
         } catch (Exception e) {
             log.debug("Cant replace old CacheValue with new CacheValue. So remove", e);
             //If cant be replaced remove.

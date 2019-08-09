@@ -67,8 +67,10 @@ public class RESTUtils {
         return url;
     }
 
-    @SuppressWarnings({"startswith"})
-    //Need help with this comment
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: The constant TRANSPORT_IN_URL can be set by the user as seen in the test-
+    //https://github.com/wso2/wso2-synapse/blob/master/modules/core/src/test/java/org/apache/synapse/rest/RESTMediationTestCase.java
+    //The checker cannot guarantee that the constant entered by the user follows the checker's guarantee.
     public static String getFullRequestPath(MessageContext synCtx) {
         Object obj = synCtx.getProperty(RESTConstants.REST_FULL_REQUEST_PATH);
         if (obj != null) {

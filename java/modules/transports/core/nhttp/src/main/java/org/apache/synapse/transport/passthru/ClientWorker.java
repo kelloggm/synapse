@@ -72,7 +72,7 @@ public class ClientWorker implements Runnable {
         this.expectEntityBody = response.isExpectResponseBody();
         @SuppressWarnings("startswith")  Map<String, @StartsWith({"https", "file"})String> headers = response.getHeaders();
         //FALSE POSITIVE: Headers are supposed to be HTTP request and response as noted in-
-        //https://docs.oracle.com/javase/7/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/Headers.html
+        //https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/Headers.html
         //As seen in the comments below that HTTP is redirected to HTTPS hence the property is guaranteed.
         Map excessHeaders = response.getExcessHeaders();
         @StartsWith({"https", "file"}) String oriURL = headers.get(PassThroughConstants.LOCATION);
@@ -92,8 +92,9 @@ public class ClientWorker implements Runnable {
 			@SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prefix =  (String) outMsgCtx.getProperty(
                     PassThroughConstants.SERVICE_PREFIX);
             //TRUE POSITIVE: object of MessageContext class searches for property with name SERVICE_PREFIX which should
-            //be an URI but it is not guaranteed to start with a valid URI string. (Explanation seems to be wrong but
-            //there is no documentation explaining the meaning of these constants).
+            //be an URI but it is not guaranteed to start with a valid URI string. Since there is no documentation
+            //on what the constant "PassThroughConstants.SERVICE_PREFIX" means we assume that when its property is
+            //looked up by an object of MessageContext it'll be a URL string.
 
 			if (prefix != null) {
 				headers.put(PassThroughConstants.LOCATION, prefix + url.getFile());

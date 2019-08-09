@@ -846,8 +846,9 @@ public class ClientHandler implements NHttpClientEventHandler {
             @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String servicePrefix =
                     (String) outMsgCtx.getProperty(NhttpConstants.SERVICE_PREFIX);
             //TRUE POSITIVE: object of MessageContext class searches for property with name SERVICE_PREFIX which should
-            //be an URI but it is not guaranteed to start with a valid URI string. (Explanation seems to be wrong but
-            //there is no documentation explaining the meaning of these constants).
+            //be an URI but it is not guaranteed to start with a valid URI string. Since there is no documentation
+            //on what the constant "PassThroughConstants.SERVICE_PREFIX" means we assume that when its property is
+            //looked up by an object of MessageContext it will be a URL string.
             for (int i = 0; i < headers.length; i++) {
                 Header header = headers[i];
                 if ("Location".equals(header.getName())

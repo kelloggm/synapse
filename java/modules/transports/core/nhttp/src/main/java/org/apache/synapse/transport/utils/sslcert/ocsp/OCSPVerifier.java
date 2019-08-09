@@ -221,11 +221,11 @@ public class OCSPVerifier implements RevocationVerifier {
      */
 
     @SuppressWarnings({"startswith"})
-    //TRUE POSITIVE: String returned wouldn't always be a URI and hence we can't make a stub file
-    //for it but we know here it will be a URI because of the check-
-    //(genName.getTagNo() == GeneralName.uniformResourceIdentifier). More information can be found on-
+    //TRUE POSITIVE: String returned by accessDescription.getAccessLocation() wouldn't always be a URI but we know
+    //that the if check (genName.getTagNo() == GeneralName.uniformResourceIdentifier) makes sure it will be a URI in the
+    //then branch. It is still not guaranteed that the url string will only have the accepted protocols.
+    //More information can be found on-
     //https://people.eecs.berkeley.edu/~jonah/bc/org/bouncycastle/asn1/x509/GeneralName.html#getTagNo()
-    //It is still not guaranteed that the url string will only have the accepted protocols.
     private List<@StartsWith({"https", "file"}) String> getAIALocations(X509Certificate cert) throws CertificateVerificationException {
 
         //Gets the DER-encoded OCTET string for the extension value for Authority information access Points

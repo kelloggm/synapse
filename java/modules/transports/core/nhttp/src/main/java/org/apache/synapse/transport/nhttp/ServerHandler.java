@@ -203,9 +203,8 @@ public class ServerHandler implements NHttpServerEventHandler {
                     headers.put(header.getName(), header.getValue());
                 }
 
-                @StartsWith({"https", "file"}) String uri = request.getRequestLine().getUri();
                 EvaluatorContext evaluatorContext =
-                        new EvaluatorContext(uri, headers);
+                        new EvaluatorContext(request.getRequestLine().getUri(), headers);
                 int priority = parser.parse(evaluatorContext);
                 executor.execute(worker, priority);
             }
