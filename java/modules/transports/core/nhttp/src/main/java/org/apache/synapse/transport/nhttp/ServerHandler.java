@@ -59,6 +59,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * The server connection handler. An instance of this class is used by each IOReactor, to
  * process every connection. Hence this class should not store any data related to a single

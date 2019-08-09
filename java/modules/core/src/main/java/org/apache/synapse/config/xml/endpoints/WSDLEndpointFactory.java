@@ -38,6 +38,8 @@ import java.net.URI;
 import java.net.URL;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Creates an {@link WSDLEndpoint} based endpoint from a XML configuration.
  * <p>
@@ -114,7 +116,9 @@ public class WSDLEndpointFactory extends DefaultEndpointFactory {
             String serviceName = wsdlElement.getAttributeValue(new QName("service"));
             String portName = wsdlElement.getAttributeValue(new QName("port"));
             // check if wsdl is supplied as a URI
-            String wsdlURI = wsdlElement.getAttributeValue(new QName("uri"));
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String wsdlURI = wsdlElement.getAttributeValue(new QName("uri"));
+            //TRUE POSITIVE: It is only for qualified name with local part "uri" that getAttributeValue would return a
+            //URI string. But it is still not guaranteed to have the accepted protocols.
 
             // set serviceName and portName in the endpoint. it does not matter if these are
             // null at this point. we are setting them only for serialization purpose.

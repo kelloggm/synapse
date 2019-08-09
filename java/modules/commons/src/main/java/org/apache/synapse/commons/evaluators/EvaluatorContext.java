@@ -30,6 +30,9 @@ import java.util.Map;
  * Holds the information about the HTTP request. Created on per request basis and
  * passed to each and every evaluator.
  */
+@SuppressWarnings("startswith")
+//TRUE POSITIVE: The whole class as can be seen from the class comment uses HTTP as the protocol. More information can
+//be found on-https://synapse.apache.org/apidocs/org/apache/synapse/commons/evaluators/EvaluatorContext.html
 public class EvaluatorContext {
 
     private String url;

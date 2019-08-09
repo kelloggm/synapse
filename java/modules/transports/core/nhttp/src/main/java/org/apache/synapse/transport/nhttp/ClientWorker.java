@@ -49,6 +49,7 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * Performs processing of the HTTP response received for our outgoing request. An instance of this
  * class is created to process each unique response.
@@ -66,7 +67,7 @@ public class ClientWorker implements Runnable {
     /** the HttpResponse received */
     private HttpResponse response = null;
     /** the endpoint URL prefix */
-    private String endpointURLPrefix = null;
+    private @StartsWith({"https", "file"}) String endpointURLPrefix = null;
 
     /**
      * Create the thread that would process the response message received for the outgoing message
@@ -78,7 +79,7 @@ public class ClientWorker implements Runnable {
      * @param endpointURLPrefix The endpoint URL prefix
      */
     public ClientWorker(ConfigurationContext cfgCtx, InputStream in,
-        HttpResponse response, MessageContext outMsgCtx, String endpointURLPrefix) {
+        HttpResponse response, MessageContext outMsgCtx, @StartsWith({"https", "file"}) String endpointURLPrefix) {
 
         this.cfgCtx = cfgCtx;
         this.in = in;
@@ -132,8 +133,12 @@ public class ClientWorker implements Runnable {
                         return o1.compareToIgnoreCase(o2);
                     }
                 });
-                
-                String servicePrefix = (String)outMsgCtx.getProperty(NhttpConstants.SERVICE_PREFIX);
+
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String servicePrefix =
+                        (String)outMsgCtx.getProperty(NhttpConstants.SERVICE_PREFIX);
+                //TRUE POSITIVE: object of MessageContext class searches for property with name SERVICE_PREFIX which should
+                //be an URI but it is not guaranteed to start with a valid URI string. (Explanation seems to be wrong but
+                //there is no documentation explaining the meaning of these constants).
                 for (int i = 0; i < headers.length; i++) {
                     Header header = headers[i];
                     if ("Location".equals(header.getName()) &&
@@ -147,7 +152,12 @@ public class ClientWorker implements Runnable {
                         try {
                             URI serviceURI = new URI(servicePrefix);
                             URI endpointURI = new URI(endpointURLPrefix);
-                            URI locationURI = new URI(header.getValue());
+                            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String headerUri =
+                                    header.getValue();
+                            //TRUE POSITIVE: Header is an interface that represents a HTTP Header field and the value
+                            //returns the URI as seen in https://hc.apache.org/httpcomponents-core-ga/httpcore/apidocs/org/apache/http/Header.html.
+                            //The URI returned is not guaranteed to have one of the accepted protocols.
+                            URI locationURI = new URI(headerUri);
 
                             if(locationURI.getHost().equalsIgnoreCase(endpointURI.getHost())){
                                 URI newURI = new URI(locationURI.getScheme(), locationURI.getUserInfo(),

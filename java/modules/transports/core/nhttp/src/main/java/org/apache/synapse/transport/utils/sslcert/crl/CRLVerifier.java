@@ -36,6 +36,8 @@ import java.security.cert.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * This is used to verify a certificate is revoked or not by using the Certificate Revocation
  * List published by the CA.
@@ -59,16 +61,16 @@ public class CRLVerifier implements RevocationVerifier {
      * @throws CertificateVerificationException
      *
      */
+
     public RevocationStatus checkRevocationStatus(X509Certificate peerCert, X509Certificate issuerCert)
             throws CertificateVerificationException {
 
-        List<String> list = getCrlDistributionPoints(peerCert);
+        List<@StartsWith({"https", "file"}) String> list = getCrlDistributionPoints(peerCert);
         //check with distributions points in the list one by one. if one fails go to the other.
-        for (String crlUrl : list) {
+        for (@StartsWith({"https", "file"}) String crlUrl : list) {
             if (log.isDebugEnabled()) {
                 log.debug("Trying to get CRL for URL: " + crlUrl);
             }
-
             if (cache != null) {
                 X509CRL x509CRL = cache.getCacheValue(crlUrl);
                 if (x509CRL != null) {
@@ -110,7 +112,7 @@ public class CRLVerifier implements RevocationVerifier {
     /**
      * Downloads CRL from the crlUrl. Does not support HTTPS
      */
-    protected X509CRL downloadCRLFromWeb(String crlURL)
+    protected X509CRL downloadCRLFromWeb(@StartsWith({"https", "file"}) String crlURL)
             throws IOException, CertificateVerificationException {
         InputStream crlStream = null;
         try {
@@ -139,7 +141,7 @@ public class CRLVerifier implements RevocationVerifier {
      * extension in a X.509 certificate. If CRL distribution point extension is
      * unavailable, returns an empty list.
      */
-    private List<String> getCrlDistributionPoints(X509Certificate cert)
+    private List<@StartsWith({"https", "file"}) String> getCrlDistributionPoints(X509Certificate cert)
             throws CertificateVerificationException {
 
         //Gets the DER-encoded OCTET string for the extension value for CRLDistributionPoints
@@ -164,7 +166,7 @@ public class CRLVerifier implements RevocationVerifier {
             throw new CertificateVerificationException("Cannot read certificate to get CRL urls", e);
         }
 
-        List<String> crlUrls = new ArrayList<String>();
+        List<@StartsWith({"https", "file"}) String> crlUrls = new ArrayList<@StartsWith({"https", "file"}) String>();
         //Loop through ASN1Encodable DistributionPoints
         for (DistributionPoint dp : distPoint.getDistributionPoints()) {
             //get ASN1Encodable DistributionPointName
@@ -178,7 +180,14 @@ public class CRLVerifier implements RevocationVerifier {
                     if (genName.getTagNo() == GeneralName.uniformResourceIdentifier) {
                         //DERIA5String contains an ascii string.
                         //A IA5String is a restricted character string type in the ASN.1 notation
-                        String url = DERIA5String.getInstance(genName.getName()).getString().trim();
+                        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String url =
+                                DERIA5String.getInstance(genName.getName()).getString().trim();
+                        //TRUE POSITIVE: String returned wouldn't always be a URI and hence we can't make a stub file
+                        //for it but we know here it will be a URI because of the check-
+                        //(genName.getTagNo() == GeneralName.uniformResourceIdentifier).
+                        // It is still not guaranteed that the url string will only have the accepted protocols.
+                        // More information can be found on-
+                        //https://people.eecs.berkeley.edu/~jonah/bc/org/bouncycastle/asn1/x509/GeneralName.html#getTagNo(
                         crlUrls.add(url);
                     }
                 }

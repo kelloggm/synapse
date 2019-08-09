@@ -35,6 +35,7 @@ import java.util.Date;
 import java.io.File;
 import java.net.URL;
 
+import org.checkerframework.checker.startswith.qual.*;
 
 public class FIXClient {
 
@@ -64,7 +65,11 @@ public class FIXClient {
 
         String addUrl = getProperty("addurl", null);
         String trpUrl = getProperty("trpurl", null);
-        String prxUrl = getProperty("prxurl", null);
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prxUrl =
+                                                                       getProperty("prxurl", null);
+        //TRUE POSITIVE: getProperty returns what is associated with the key (in this case "prxurl"). In this case it
+        //will be the proxy url as seen on https://synapse.apache.org/Synapse_Samples_Setup.html which can also be HTTP
+        //which is not valid according to our checker.
         String repo = getProperty("repository", "client_repo");
         String qty = getProperty("qty", "1");
 

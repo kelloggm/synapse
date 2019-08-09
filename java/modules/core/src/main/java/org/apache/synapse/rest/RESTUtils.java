@@ -36,6 +36,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 public class RESTUtils {
 
     private static final Log log = LogFactory.getLog(RESTUtils.class);
@@ -65,6 +67,10 @@ public class RESTUtils {
         return url;
     }
 
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: The constant TRANSPORT_IN_URL can be set by the user as seen in the test-
+    //https://github.com/wso2/wso2-synapse/blob/master/modules/core/src/test/java/org/apache/synapse/rest/RESTMediationTestCase.java
+    //The checker cannot guarantee that the constant entered by the user follows the checker's guarantee.
     public static String getFullRequestPath(MessageContext synCtx) {
         Object obj = synCtx.getProperty(RESTConstants.REST_FULL_REQUEST_PATH);
         if (obj != null) {

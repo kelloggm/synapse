@@ -39,6 +39,8 @@ import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * The FIXSessionFactory is responsible for creating and managing FIX sessions. A FIX session can be
  * initiated in one of two modes, namely the acceptor mode and the initiator mode. FIX sessions
@@ -399,7 +401,6 @@ public class FIXSessionFactory {
 
     /**
      * Get the FIX configuration URL from the services.xml.
-     *
      * @param service the AxisService
      * @param acceptor boolean value indicating the FIX application type
      * @return an InputStream to the FIX configuration file/resource
@@ -415,7 +416,9 @@ public class FIXSessionFactory {
         }
 
         if (fixConfigURLParam != null) {
-            String fixConfigURLValue = fixConfigURLParam.getValue().toString();
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String fixConfigURLValue =
+                                                                    fixConfigURLParam.getValue().toString();
+            //TRUE POSITIVE: url string is read from a constants list and the checker cannot fullfill the guarantee.
             try {
                 URL url = new URL(fixConfigURLValue);
                 fixConfigStream = url.openStream();

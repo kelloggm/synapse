@@ -42,6 +42,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Represents a dynamic load balance endpoint. The application membership is not static,
  * but discovered through some mechanism such as using a GCF
@@ -326,6 +328,7 @@ public class DynamicLoadbalanceEndpoint extends LoadbalanceEndpoint {
         }
     }
 
+    @SuppressWarnings("startswith") //TRUE POSITIVE: URL strings should never start with "http"
     private EndpointReference getEndpointReferenceAfterURLRewrite(Member currentMember,
                                                                   String transport,
                                                                   String address,

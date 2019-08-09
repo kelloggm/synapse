@@ -37,6 +37,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Used to check if a Certificate is revoked or not by its CA using Online Certificate
  * Status Protocol (OCSP).
@@ -76,9 +78,9 @@ public class OCSPVerifier implements RevocationVerifier {
 
         OCSPReq request = generateOCSPRequest(issuerCert, peerCert.getSerialNumber());
         //This list will sometimes have non ocsp urls as well.
-        List<String> locations = getAIALocations(peerCert);
+        List<@StartsWith({"https", "file"}) String> locations = getAIALocations(peerCert);
 
-        for (String serviceUrl : locations) {
+        for (@StartsWith({"https", "file"}) String serviceUrl : locations) {
 
             SingleResp[] responses;
             try {
@@ -127,7 +129,7 @@ public class OCSPVerifier implements RevocationVerifier {
      * @throws CertificateVerificationException
      *
      */
-    protected OCSPResp getOCSPResponse(String serviceUrl,
+    protected OCSPResp getOCSPResponse(@StartsWith({"https", "file"}) String serviceUrl,
                                        OCSPReq request) throws CertificateVerificationException {
         try {
             //Todo: Use http client.
@@ -217,7 +219,14 @@ public class OCSPVerifier implements RevocationVerifier {
      * @throws CertificateVerificationException
      *
      */
-    private List<String> getAIALocations(X509Certificate cert) throws CertificateVerificationException {
+
+    @SuppressWarnings({"startswith"})
+    //TRUE POSITIVE: String returned by accessDescription.getAccessLocation() wouldn't always be a URI but we know
+    //that the if check (genName.getTagNo() == GeneralName.uniformResourceIdentifier) makes sure it will be a URI in the
+    //then branch. It is still not guaranteed that the url string will only have the accepted protocols.
+    //More information can be found on-
+    //https://people.eecs.berkeley.edu/~jonah/bc/org/bouncycastle/asn1/x509/GeneralName.html#getTagNo()
+    private List<@StartsWith({"https", "file"}) String> getAIALocations(X509Certificate cert) throws CertificateVerificationException {
 
         //Gets the DER-encoded OCTET string for the extension value for Authority information access Points
         byte[] aiaExtensionValue = cert.getExtensionValue(X509Extensions.AuthorityInfoAccess.getId());
@@ -238,14 +247,14 @@ public class OCSPVerifier implements RevocationVerifier {
             throw new CertificateVerificationException("Cannot read certificate to get OCSP URLs", e);
         }
 
-        List<String> ocspUrlList = new ArrayList<String>();
+        List<@StartsWith({"https", "file"}) String> ocspUrlList = new ArrayList<@StartsWith({"https", "file"}) String>();
         AccessDescription[] accessDescriptions = authorityInformationAccess.getAccessDescriptions();
         for (AccessDescription accessDescription : accessDescriptions) {
 
             GeneralName gn = accessDescription.getAccessLocation();
             if (gn.getTagNo() == GeneralName.uniformResourceIdentifier) {
                 DERIA5String str = DERIA5String.getInstance(gn.getName());
-                String accessLocation = str.getString();
+                @StartsWith({"https", "file"}) String accessLocation = str.getString();
                 ocspUrlList.add(accessLocation);
             }
         }

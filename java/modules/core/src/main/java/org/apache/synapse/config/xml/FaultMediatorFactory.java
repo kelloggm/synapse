@@ -31,6 +31,8 @@ import java.net.URISyntaxException;
 import java.util.Iterator;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Factory for {@link FaultMediator} instances.
  * <p>
@@ -160,7 +162,13 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
         OMElement node = elem.getFirstChildWithName(NODE_Q);
         if (node != null && node.getText() != null) {
             try {
-                faultMediator.setFaultNode(new URI(node.getText()));
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri =
+                                                                               node.getText();
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. The value of the
+                //SYNAPSE_NAMESPACE constant is hard coded to a URL with protocol "http" that is against the guarantee
+                //of the checker. More information can be found in the config list here:
+                //https://synapse.apache.org/apidocs/constant-values.html#org.apache.synapse.config.xml.XMLConfigConstants.SYNAPSE_NAMESPACE
+                faultMediator.setFaultNode(new URI(uri));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault node : " + node.getText(), e);
             }
@@ -169,7 +177,13 @@ public class FaultMediatorFactory extends AbstractMediatorFactory  {
         OMElement role = elem.getFirstChildWithName(ROLE_Q);
         if (role != null && role.getText() != null) {
             try {
-                faultMediator.setFaultRole(new URI(role.getText()));
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String uri2 =
+                                                                               role.getText();
+                //TRUE POSITIVE:The child is picked up from the document by matching the name. The value of the
+                //SYNAPSE_NAMESPACE constant is hard coded to a URL with protocol "http" that is against the guarantee
+                //of the checker. More information can be found in the config list here:
+                //https://synapse.apache.org/apidocs/constant-values.html#org.apache.synapse.config.xml.XMLConfigConstants.SYNAPSE_NAMESPACE
+                faultMediator.setFaultRole(new URI(uri2));
             } catch (URISyntaxException e) {
                 handleException("Invalid URI specified for fault role : " + role.getText(), e);
             }

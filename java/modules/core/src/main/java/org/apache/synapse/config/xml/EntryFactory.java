@@ -37,6 +37,8 @@ import java.net.URL;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Factory for {@link Entry} instances.
  */
@@ -83,9 +85,11 @@ public class EntryFactory implements XMLToObjectMapper {
                 descriptionElem.detach();
             }
 
-            String src  = elem.getAttributeValue(
+            @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String src  = elem.getAttributeValue(
                     new QName(XMLConfigConstants.NULL_NAMESPACE, "src"));
-
+            //TRUE POSITIVE: The URL is looked up from the local registry but it is not guaranteed to only have accepted
+            //protocols. The src attribute in the local registry represents the URL and more information can be found on
+            //https://synapse.apache.org/userguide/config.html#LocalEntryConfig.
             // if a src attribute is present, this is a URL source resource,
             // it would now be loaded from the URL source, as all static properties
             // are initialized at startup

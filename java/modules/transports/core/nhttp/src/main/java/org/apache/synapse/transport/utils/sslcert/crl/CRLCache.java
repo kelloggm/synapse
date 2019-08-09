@@ -34,6 +34,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Since a CRL maps to a CRL URL, the CRLCache should have x509CRL entries against CRL URLs.
  * This cache is a Singleton since it is shared by any transport which needs SSL certificate
@@ -114,9 +116,8 @@ public class CRLCache implements ManageableCache {
         }
 
         try {
-            String crlUrl = cacheValue.crlUrl;
-            X509CRL x509CRL = crlVerifier.downloadCRLFromWeb(crlUrl);
-            this.setCacheValue(crlUrl, x509CRL);
+            X509CRL x509CRL = crlVerifier.downloadCRLFromWeb(cacheValue.crlUrl);
+            this.setCacheValue(cacheValue.crlUrl, x509CRL);
         } catch (Exception e) {
             log.debug("Cant replace old CacheValue with new CacheValue. So remove", e);
             //If cant be replaced remove.
@@ -140,7 +141,7 @@ public class CRLCache implements ManageableCache {
         return null;
     }
 
-    public synchronized void setCacheValue(String crlUrl, X509CRL crl) {
+    public synchronized void setCacheValue(@StartsWith({"https", "file"}) String crlUrl, X509CRL crl) {
         CRLCacheValue cacheValue = new CRLCacheValue(crlUrl, crl);
         if (log.isDebugEnabled()) {
             log.debug("Before set - HashMap size " + hashMap.size());
@@ -167,11 +168,11 @@ public class CRLCache implements ManageableCache {
      */
     private class CRLCacheValue implements ManageableCacheValue {
 
-        private String crlUrl;
+        private @StartsWith({"https", "file"}) String crlUrl;
         private X509CRL crl;
         private long timeStamp = System.currentTimeMillis();
 
-        public CRLCacheValue(String crlUrl, X509CRL crl) {
+        public CRLCacheValue(@StartsWith({"https", "file"}) String crlUrl, X509CRL crl) {
             this.crlUrl = crlUrl;
             this.crl = crl;
         }

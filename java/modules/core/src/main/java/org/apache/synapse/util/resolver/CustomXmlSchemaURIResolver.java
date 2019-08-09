@@ -24,6 +24,8 @@ import org.apache.synapse.config.SynapseConfiguration;
 import org.apache.ws.commons.schema.resolver.URIResolver;
 import org.xml.sax.InputSource;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Class that adapts a {@link ResourceMap} to XmlSchemas's {@link URIResolver}.
  */
@@ -55,7 +57,8 @@ public class CustomXmlSchemaURIResolver implements URIResolver {
      * returns null, it will resolve the location using
      * {@link SynapseConfigUtils#resolveRelativeURI(String, String)}.
      */
-    public InputSource resolveEntity(String targetNamespace, String schemaLocation, String baseUri) {
+    public InputSource resolveEntity(String targetNamespace, @StartsWith({"https", "file"}) String schemaLocation,
+                                                             @StartsWith({"https", "file"}) String baseUri) {
         InputSource result = null;
         if (resourceMap != null) {
             result = resourceMap.resolve(synCfg, schemaLocation);

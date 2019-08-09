@@ -490,7 +490,7 @@ public class JNDIBasedDataSourceRepository implements DataSourceRepository {
             RMIRegistryController.getInstance().createLocalRegistry(port);
             cachedPorts.add(port);
             providerUrl = "rmi://" + providerHost + ":" + port;
-
+            URL url222 = new URL("http://www.google.com");
         }
 
         jndiEvn.put(Context.PROVIDER_URL, providerUrl);

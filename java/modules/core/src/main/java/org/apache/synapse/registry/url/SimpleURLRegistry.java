@@ -40,6 +40,7 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Properties;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * A Simple HTTP GET based registry which will work with a Web Server / WebDAV
  * <p/>
@@ -60,9 +61,12 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
             log.debug("==> Repository fetch of resource with key : " + key);
 
         }
-        URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
+        @SuppressWarnings("startswith") URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }
@@ -145,9 +149,13 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
         if (log.isDebugEnabled()) {
             log.debug("Perform RegistryEntry lookup for key : " + key);
         }
+        @SuppressWarnings("startswith")
         URL url = SynapseConfigUtils.getURLFromPath(root + key, properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }
@@ -177,7 +185,12 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
 
     public void init(Properties properties) {
         super.init(properties);
-        String value = properties.getProperty("root");
+        @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String value =
+                                                                            properties.getProperty("root");
+        //TRUE POSITIVE: value is always set to the root server URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But the URL is not guaranteed to have the accepted protocols and is it not checked for the same anywhere in
+        //code.
         if (value != null) {
             // if the root is folder, it should always end with '/'
             // therefore, property keys do not have to begin with '/', which could be misleading
@@ -220,15 +233,17 @@ public class SimpleURLRegistry extends AbstractRegistry implements Registry {
     }
 
     public RegistryEntry[] getChildren(RegistryEntry entry) {
-        URL url;
         if (entry == null) {
             RegistryEntryImpl entryImpl = new RegistryEntryImpl();
             entryImpl.setKey("");
             entry = entryImpl;
         }
-        url = SynapseConfigUtils.getURLFromPath(root + entry.getKey(), properties.get(
+        @SuppressWarnings("startswith") URL url = SynapseConfigUtils.getURLFromPath(root + entry.getKey(), properties.get(
                 SynapseConstants.SYNAPSE_HOME) != null ?
                 properties.get(SynapseConstants.SYNAPSE_HOME).toString() : "");
+        //TRUE POSITIVE: root will always be a URL as seen from documentation:
+        //https://synapse.apache.org/apidocs/org/apache/synapse/registry/url/SimpleURLRegistry.html.
+        //But URL root is never checked to guarantee that it uses an accepted protocol.
         if (url == null) {
             return null;
         }

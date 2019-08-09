@@ -28,6 +28,8 @@ import java.util.ArrayList;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * A mediator capable of rewriting URLs in messages. The input URL can be
  * extracted from the To header of the message or any of the message properties.
@@ -71,6 +73,11 @@ public class URLRewriteMediator extends AbstractMediator {
         return true;
     }
 
+    @SuppressWarnings("startswith")
+    //TRUE POSITIVE: The field inputProperty has no documentation available about what it represents. The class
+    //documentation can be found at: https://synapse.apache.org/apidocs/org/apache/synapse/mediators/transform/url/URLRewriteMediator.html#fields.inherited.from.class.org.apache.synapse.mediators.AbstractMediator
+    //Since the class comment talks about rewriting URLs the field inputProperty can be thought of as a URL string
+    //but it is still not found to fulfill the guarantee the checker promises.
     private URI getInputAddress(MessageContext messageContext) {
         String uriString = null;
         if (inputProperty != null) {

@@ -1,0 +1,15 @@
+import org.checkerframework.checker.startswith.qual.*;
+
+package java.net;
+
+class URL{
+    public URL(@StartsWith({"https", "file"}) String spec);
+    public @StartsWith({"https", "file"}) String getProtocol(URL this);
+    public @StartsWith({"https", "file"}) String toString(URL this);
+}
+
+class URI{
+    public URI(@StartsWith({"https", "file"}) String str);
+    public @StartsWith({"https", "file"}) String toString(URI this);
+    public @StartsWith({"https", "file"}) String getProtocol(URI this);
+}

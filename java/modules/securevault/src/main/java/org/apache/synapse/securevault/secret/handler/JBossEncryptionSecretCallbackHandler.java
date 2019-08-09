@@ -29,7 +29,7 @@ import org.apache.synapse.securevault.secret.SingleSecretCallback;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.Key;
 
-import com.amazon.checkerframework.cryptopolicy.qual.SuppressCryptoWarning;
+//import com.amazon.checkerframework.cryptopolicy.qual.SuppressCryptoWarning;
 
 /**
  * SecretCallbackHandler implementation which is compatible to the default encryption used

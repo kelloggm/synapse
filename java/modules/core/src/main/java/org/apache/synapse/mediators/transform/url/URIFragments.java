@@ -22,6 +22,8 @@ package org.apache.synapse.mediators.transform.url;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * This class represents a URI, fragmented into 7 major components. These components are
  * namely scheme, user info, host, port, path, query and ref. Out of these seven components,
@@ -111,7 +113,7 @@ public class URIFragments {
      * @return a string representation of a valid URI
      * @throws URISyntaxException if the fragments form a malformed URI
      */
-    public String toURIString() throws URISyntaxException {
+    public @StartsWith({"https", "file"}) String toURIString() throws URISyntaxException {
         return toURI().toString();
     }
 }

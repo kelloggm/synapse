@@ -1,0 +1,10 @@
+package java.lang;
+
+import org.checkerframework.checker.startswith.qual.*;
+import org.checkerframework.dataflow.qual.*;
+
+class String{
+    public @PolyStartsWith String trim(@PolyStartsWith String this);
+    @Pure
+    public int lastIndexOf(String str);
+}

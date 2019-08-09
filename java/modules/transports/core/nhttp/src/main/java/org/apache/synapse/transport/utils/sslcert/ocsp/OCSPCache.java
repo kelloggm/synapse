@@ -35,6 +35,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.checkerframework.checker.startswith.qual.*;
 /**
  * This is a cache to store OCSP responses against Certificate Serial Number since an OCSP
  * response depends on the certificate. This is a singleton since more than one cache of this
@@ -115,7 +116,7 @@ public class OCSPCache implements ManageableCache {
         }
 
         try {
-            String serviceUrl = cacheValue.serviceUrl;
+            @StartsWith({"https", "file"}) String serviceUrl = cacheValue.serviceUrl;
             OCSPReq request = cacheValue.request;
             OCSPResp response= ocspVerifier.getOCSPResponse(serviceUrl, request);
 
@@ -155,7 +156,8 @@ public class OCSPCache implements ManageableCache {
             return null;
     }
 
-    public synchronized void setCacheValue(BigInteger serialNumber, SingleResp singleResp, OCSPReq request, String serviceUrl) {
+    public synchronized void setCacheValue(BigInteger serialNumber, SingleResp singleResp, OCSPReq request,
+                                           @StartsWith({"https", "file"}) String serviceUrl) {
         OCSPCacheValue cacheValue = new OCSPCacheValue(serialNumber, singleResp, request, serviceUrl);
         if (log.isDebugEnabled()) {
             log.debug("Before set - HashMap size " + hashMap.size());
@@ -184,10 +186,11 @@ public class OCSPCache implements ManageableCache {
         private BigInteger serialNumber;
         private SingleResp singleResp;
         private OCSPReq request;
-        private String serviceUrl;
+        private @StartsWith({"https", "file"}) String serviceUrl;
         private long timeStamp = System.currentTimeMillis();
 
-        public OCSPCacheValue(BigInteger serialNumber, SingleResp singleResp, OCSPReq request, String serviceUrl) {
+        public OCSPCacheValue(BigInteger serialNumber, SingleResp singleResp, OCSPReq request,
+                              @StartsWith({"https", "file"}) String serviceUrl) {
             this.serialNumber = serialNumber;
             this.singleResp = singleResp;
             //request and serviceUrl are needed to update the cache with new values.

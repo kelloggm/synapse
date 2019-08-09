@@ -1,0 +1,7 @@
+package org.apache.ws.commons.schema.resolver;
+import org.checkerframework.checker.startswith.qual.*;
+
+class URIResolver{
+    InputSource resolveEntity(URIResolver this, String targetNamespace, @StartsWith({"https", "file"}) String schemaLocation,
+                              @StartsWith({"https", "file"}) String baseUri);
+}

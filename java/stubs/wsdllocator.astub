@@ -1,0 +1,9 @@
+package javax.wsdl.xml;
+
+import org.checkerframework.checker.startswith.qual.*;
+
+class WSDLLocator{
+    InputSource getImportInputSource(WSDLLocator this, @StartsWith({"https", "file"}) String parentLocation,
+                                     @StartsWith({"https", "file"}) String importLocation);
+
+}

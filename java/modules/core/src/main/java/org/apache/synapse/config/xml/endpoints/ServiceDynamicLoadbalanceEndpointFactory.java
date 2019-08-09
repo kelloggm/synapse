@@ -36,6 +36,8 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.*;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 /**
  * Creates {@link org.apache.synapse.endpoints.DynamicLoadbalanceEndpoint} using an XML configuration.
  * <p/>
@@ -103,7 +105,12 @@ public class ServiceDynamicLoadbalanceEndpointFactory extends EndpointFactory {
             // Load the file
             OMXMLParserWrapper builder = null;
             try {
-                builder = OMXMLBuilderFactory.createOMBuilder(new URL(configuration).openStream());
+                @SuppressWarnings("startswith") @StartsWith({"https", "file"}) String url = configuration;
+                //TRUE POSITIVE: The url of the ServiceDynamicLoadBalanceEndpoint config file is read from the
+                //Endpoint Configuration and hence doesn't guarantee that URLs start with the accepted protocols. More
+                //information can be found on
+                //https://synapse.apache.org/userguide/config.html#WSDLEndpointConfig.
+                builder = OMXMLBuilderFactory.createOMBuilder(new URL(url).openStream());
             } catch (Exception e) {
                 handleException("Could not load ServiceDynamicLoadbalanceEndpoint configuration file " +
                                 configuration);

@@ -46,6 +46,8 @@ import java.util.Set;
 import java.util.TreeMap;
 import java.util.Comparator;
 
+import org.checkerframework.checker.startswith.qual.*;
+
 public class ClientWorker implements Runnable {
 
     private static final Log log = LogFactory.getLog(ClientWorker.class);
@@ -68,12 +70,12 @@ public class ClientWorker implements Runnable {
         this.targetConfiguration = targetConfiguration;
         this.response = response;
         this.expectEntityBody = response.isExpectResponseBody();
-
-        Map<String,String> headers = response.getHeaders();
+        @SuppressWarnings("startswith")  Map<String, @StartsWith({"https", "file"})String> headers = response.getHeaders();
+        //FALSE POSITIVE: Headers are supposed to be HTTP request and response as noted in-
+        //https://docs.oracle.com/javase/8/docs/jre/api/net/httpserver/spec/com/sun/net/httpserver/Headers.html
+        //As seen in the comments below that HTTP is redirected to HTTPS hence the property is guaranteed.
         Map excessHeaders = response.getExcessHeaders();
-      
-		String oriURL = headers.get(PassThroughConstants.LOCATION);
-		
+        @StartsWith({"https", "file"}) String oriURL = headers.get(PassThroughConstants.LOCATION);
 		// Special casing 302 scenario in following section. Not sure whether it's the correct fix,
 		// but this fix makes it possible to do http --> https redirection.
 		if (oriURL != null && response.getStatus() != HttpStatus.SC_MOVED_TEMPORARILY && !targetConfiguration
@@ -87,8 +89,13 @@ public class ClientWorker implements Runnable {
 			}
 
 			headers.remove(PassThroughConstants.LOCATION);
-			String prefix =  (String) outMsgCtx.getProperty(
+			@SuppressWarnings("startswith") @StartsWith({"https", "file"}) String prefix =  (String) outMsgCtx.getProperty(
                     PassThroughConstants.SERVICE_PREFIX);
+            //TRUE POSITIVE: object of MessageContext class searches for property with name SERVICE_PREFIX which should
+            //be an URI but it is not guaranteed to start with a valid URI string. Since there is no documentation
+            //on what the constant "PassThroughConstants.SERVICE_PREFIX" means we assume that when its property is
+            //looked up by an object of MessageContext it'll be a URL string.
+
 			if (prefix != null) {
 				headers.put(PassThroughConstants.LOCATION, prefix + url.getFile());
 			}
